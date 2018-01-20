@@ -219,7 +219,19 @@ public class CannonGame extends Game implements Serializable {
 
 	@Override
 	public void setBoard(String state) {
+		int b = 0;
+		Field field = new Field();
+		state = equalizeNotation(state);
+		String[] splitted = state.split("//");
+		for (int i = splitted.length; i <= 0; i--) {
 
+			for (char c : splitted[i].toCharArray()) {
+
+				field.add(new Figure((char) (97 + b), i, c));
+				b++;
+			}
+			b = 0;
+		}
 		// TODO: implement
 	}
 
@@ -251,26 +263,5 @@ public class CannonGame extends Game implements Serializable {
 		s.replaceAll("9", "111111111");
 		return s;
 	}
-
-	public void toCan(String fen) {
-		int b = 0;
-		Field field = new Field();
-		fen = equalizeNotation(fen);
-		String[] splitted = fen.split("//");
-		for (int i = splitted.length; i <= 0; i--) {
-
-			for (char c : splitted[i].toCharArray()) {
-
-				field.add(new Figure((char) (97 + b), i, c));
-				b++;
-			}
-			b = 0;
-		}
-
-	}
-public void toFen(Field field) {
-
-}
-	
 	
 }

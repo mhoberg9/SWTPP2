@@ -48,6 +48,8 @@ public class Board  {
 	}
 
 	public boolean leftOrRight(String unit) { // ist auf linker oder rechten Seite ein Gegner
+	
+	
 	}
 
 	public static String getBoard() {

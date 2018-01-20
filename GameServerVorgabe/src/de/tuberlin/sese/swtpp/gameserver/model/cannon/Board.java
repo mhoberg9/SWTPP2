@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class Board  {
-	
+public class Board {
+
 	public static LinkedList<Figure> storage = null;
 
 	// topLeft
@@ -29,14 +29,19 @@ public class Board  {
 
 		char column = moveBeginning.charAt(0);
 		int row = (int) moveBeginning.charAt(1);
-
 		Figure f = new Figure(requestingPlayer, column, row);
 
-		return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
-				|| left.test(a, f) || right.test(a, f) && !requestingPlayer);
+		if (requestingPlayer = false) {
+			return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
+					|| left.test(a, f) || right.test(a, f) && !requestingPlayer);
+		} else {
+			return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a, f) || bottom.test(a, f)
+					|| bottomRight.test(a, f) || right.test(a, f) && !requestingPlayer);
+		}
 	}
 
-	public boolean isCannon(String unit) {
+	// check if figure is cannon
+	public boolean isCannon(String unit, boolean requestingPlayer) {
 
 	}
 
@@ -48,6 +53,7 @@ public class Board  {
 	}
 
 	public boolean leftOrRight(String unit) { // ist auf linker oder rechten Seite ein Gegner
+
 	}
 
 	public static String getBoard() {

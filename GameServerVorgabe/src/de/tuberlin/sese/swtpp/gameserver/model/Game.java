@@ -181,6 +181,7 @@ public abstract class Game implements Serializable{
 	 * ---- it is a valid move
 	 * ---- it is done by the right player
 	 * ---- there is no other move that the player is forced to perform
+	 * 
 	 * - if the move can be performed, the following has to be done:
 	 * ---- the board state has to be updated (e.g. figures moved/deleted)
 	 * ---- the board status has to be updated (check if game is finished)

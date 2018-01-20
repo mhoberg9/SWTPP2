@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import org.hamcrest.core.Is;
 
-import de.tuberlin.sese.swtpp.gameserver.model.Field;
-import de.tuberlin.sese.swtpp.gameserver.model.Figure;
 import de.tuberlin.sese.swtpp.gameserver.model.Game;
 import de.tuberlin.sese.swtpp.gameserver.model.Move;
 import de.tuberlin.sese.swtpp.gameserver.model.Player;
@@ -220,26 +218,25 @@ public class CannonGame extends Game implements Serializable {
 	@Override
 	public void setBoard(String state) {
 		int b = 0;
-		Field field = new Field();
+		Board board = new Board();
 		state = equalizeNotation(state);
 		String[] splitted = state.split("//");
 		for (int i = splitted.length; i <= 0; i--) {
 
 			for (char c : splitted[i].toCharArray()) {
 
-				field.add(new Figure((char) (97 + b), i, c));
+				board.storage.add(new Figure((char) (97 + b), i, c));
 				b++;
 			}
 			b = 0;
 		}
-		// TODO: implement
+		
 	}
 
 	@Override
 	public String getBoard() {
+		return Board.getBoard();
 
-		// TODO: replace with real implementation
-		return "";
 	}
 
 	@Override
@@ -263,5 +260,5 @@ public class CannonGame extends Game implements Serializable {
 		s.replaceAll("9", "111111111");
 		return s;
 	}
-	
+
 }

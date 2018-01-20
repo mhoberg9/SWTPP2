@@ -263,14 +263,5 @@ public class CannonGame extends Game implements Serializable {
 		s.replaceAll("9", "111111111");
 		return s;
 	}
-
-	public void toCan(String fen) {
-	
-
-	}
-public void toFen(Field field) {
-
-}
-	
 	
 }

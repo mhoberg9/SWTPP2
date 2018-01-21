@@ -218,18 +218,19 @@ public class CannonGame extends Game implements Serializable {
 	@Override
 	public void setBoard(String state) {
 		int b = 0;
-		Board board = new Board();
+	//	Board board = new Board();
 		state = equalizeNotation(state);
 		String[] splitted = state.split("//");
 		for (int i = splitted.length; i <= 0; i--) {
 
 			for (char c : splitted[i].toCharArray()) {
 
-				board.storage.add(new Figure((char) (97 + b), i, c));
+				Board.storage.add(new Figure((char) (97 + b), i, c));
 				b++;
 			}
 			b = 0;
 		}
+		Board.storage.update();
 		
 	}
 

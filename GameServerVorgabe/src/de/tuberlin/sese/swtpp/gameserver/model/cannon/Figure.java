@@ -52,6 +52,111 @@ public class Figure {
 
 	}
 
+	public boolean isEmpty() {
+		return empty;
+	}
+
+	public void setEmpty(boolean empty) {
+		this.empty = empty;
+	}
+
+	public boolean isWhite() {
+		return white;
+	}
+
+	public void setWhite(boolean white) {
+		this.white = white;
+	}
+
+	public boolean isCastle() {
+		return castle;
+	}
+
+	public void setCastle(boolean castle) {
+		this.castle = castle;
+	}
+
+	public char getColumn() {
+		return column;
+	}
+
+	public void setColumn(char column) {
+		this.column = column;
+	}
+
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public Figure getTop() {
+		return top;
+	}
+
+	public void setTop(Figure top) {
+		this.top = top;
+	}
+
+	public Figure getTopLeft() {
+		return topLeft;
+	}
+
+	public void setTopLeft(Figure topLeft) {
+		this.topLeft = topLeft;
+	}
+
+	public Figure getTopRight() {
+		return topRight;
+	}
+
+	public void setTopRight(Figure topRight) {
+		this.topRight = topRight;
+	}
+
+	public Figure getLeft() {
+		return left;
+	}
+
+	public void setLeft(Figure left) {
+		this.left = left;
+	}
+
+	public Figure getRight() {
+		return right;
+	}
+
+	public void setRight(Figure right) {
+		this.right = right;
+	}
+
+	public Figure getBot() {
+		return bot;
+	}
+
+	public void setBot(Figure bot) {
+		this.bot = bot;
+	}
+
+	public Figure getBotRight() {
+		return botRight;
+	}
+
+	public void setBotRight(Figure botRight) {
+		this.botRight = botRight;
+	}
+
+	public Figure getBotLeft() {
+		return botLeft;
+	}
+
+	public void setBotLeft(Figure botLeft) {
+		this.botLeft = botLeft;
+	}
+
+	
 	// Useless if in constructor
 	// public void partFigure(char c) {
 	// if (c == 'b' ||c== 'B')

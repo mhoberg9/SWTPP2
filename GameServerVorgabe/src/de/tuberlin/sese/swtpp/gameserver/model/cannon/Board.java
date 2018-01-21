@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 public class Board {
 
-	public static LinkedList<Figure> storage = null;
+	public static FigureHandler storage = null;
 
 	// topLeft
 	public static BiPredicate<Figure, Figure> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
@@ -50,19 +50,53 @@ public class Board {
 		
 		char toCol = to.charAt(0);
 		char toRow= to.charAt(1);
-		Figure f= new Figure(requestingPlayer,fromCol,(int)fromRow);
-		//in einer Spalte black
-		if (fromRow-toRow>=4 &&fromCol==toCol) {
-			storage.stream().filter(a-> top.test(a, f)||top.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()=2;
+		Figure f=null;
+		if(isWhite(fromCol,fromRow,requestingPlayer)) {
+		f=	storage.stream().filter(a-> a.column=fromColumn && a.getRow()==fromRow).findFirst().get();
 		}
-		//in einer Reihe black
-		if (fromRow==toRow && (toCol-fromCol <=4||toCol-fromCol<=4))
-			
-		if(fromRow==toRow && (toCol-fromCol>=4))
-			storage.stream().filter(a-> left.test(a, f)||left.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()=2;
-			
+		//filter kanonen heraus nur Versuch
+		storage.stream().filter(a->a.left!=null &&a.right!=null&&a.isWhite()==requestingPlayer);
+	
+		/**
+		 * Wichtig 8 Fälle: 
+		 * Diagonal, Schuss nach oben / unten u. links / rechts
+		 * 
+		 * Horizontal 
+		 * Vertikal
+		 * keine unterscheidung zwischen black und white
+		 * 
+		 * 
+		 * 
+		 * TODO @Malte 
+		 * BiPrädikate für die die einzelnen Kanonenfälle schreiben:
+		 * Nach folgendem Schema: 2 Figuren als Input
+		 * 
+		 * Zum besseren Verständnis 'f' ist die figur, die angesprochen wird um den Schuss zu machen
+		 * 
+		 * Am besten du machst direkt die Filter Befehle
+		 * 
+		 * in Z. 81 ein gutes Bsp
+		 */
+		
+		if (fromRow==toRow && (toCol-fromCol <=4)) {
+			return (storage.stream().filter(a->a==f.left||a==f.left.left && a.isWhite()==requestingPlayer ).count()==2)&&f.getLeft().getLeft().isEmpty();
+		}
+		
+		//
+		if (fromRow-toRow>=4 &&fromCol==toCol) {
+			storage.stream().filter(a-> top.test(a, f)||top.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()==2;
+		}
+//		if(fromRow-toRow<=4 &&fromCol==toCol) {
+//			return (f.bot.bot=f.isWhite() &&f.bot.isWhite()&& f.bot.isWhite() &&f.bot.bot.bot.isWhite());
+//		
+//		}
+		//in einer Reihe black Richtig?
+		if(fromRow==toRow && (toCol-fromCol>=4)) {
+		return	storage.stream().filter(a->)
+		
+		}
 		//Diagonal
-		if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4)
+		if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4){}
 		
 		
 

@@ -8,10 +8,10 @@ public class Board {
 
 	public static FigureHandler storage = null;
 
-	//Test
-	public static TriPredicate<Figure,Figure,Figure> diagonal=(a,b,c)->a.equals(2);
+	// Test
+	public static TriPredicate<Figure, Figure, Figure> diagonal = (a, b, c) -> a.equals(2);
 	// topLeft
-	
+
 	public static BiPredicate<Figure, Figure> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
 	// top
 	public static BiPredicate<Figure, Figure> top = (a, b) -> a.column == b.column && a.row == b.row + 1;
@@ -27,8 +27,6 @@ public class Board {
 	public static BiPredicate<Figure, Figure> bottom = (a, b) -> a.column == b.column && a.row == b.row - 1;
 	// bottomRight
 	public static BiPredicate<Figure, Figure> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
-
-
 
 	public boolean inDanger(String moveBeginning, String requestingPlayer) {
 
@@ -46,7 +44,7 @@ public class Board {
 	}
 
 	// check if figure is cannon
-	public boolean isCannonValid(String from,String to, String requestingPlayer) {
+	public Cannon isCannonValid(String from,String to, String requestingPlayer) {
 	
 		char fromCol = from.charAt(0);
 		char fromRow = from.charAt(1);
@@ -54,228 +52,100 @@ public class Board {
 		char toRow = to.charAt(1);
 
 		Figure f = null;
-//Warning!
-		if (f.isPlayer(requestingPlayer)) {
-			// f = storage.stream().filter(a -> a.column = fromCol&& a.getRow() ==
-			// fromRow).findFirst().get();
+//		if (f.isPlayer(requestingPlayer)) {
+//			f = storage.stream().filter(a -> a.column = fromCol && a.row == fromRow).findFirst().get();
 
-<<<<<<< HEAD
+
+
 		// Diagonal - untenlinks to obenrechts
 		if (toRow > fromRow && toCol > fromCol && (toRow - fromRow) >= 4 && (toRow - fromRow) <= 5
 				&& ((toCol - fromCol) >= 4) && ((toCol - fromCol) <= 5)) {
-
+			if ((f.topRight.color == f.color && f.topRight.topRight.color == f.color) ) {
+				LinkedList<Figure>aim = new LinkedList <> ();
+				aim.add(f.topRight.topRight.topRight);
+				aim.add(f.topRight.topRight.topRight.topRight);
+				aim.add(f.topRight.topRight.topRight.topRight.topRight);
+				return new Cannon (f, f.topRight, f.topRight.topRight, aim);
 		}
 
 		// Diagonal - untenrechts to obenrechts
 		if (toRow > fromRow && fromCol > toCol && (toRow - fromRow) >= 4 && (toRow - fromRow) <= 5
 				&& (fromCol - toCol) >= 4 && (fromCol - toCol) <= 5) {
-=======
+			if(f.topLeft.color == f.color && f.topLeft.topLeft.color == f.color) {
+				LinkedList<Figure>aim = new LinkedList <> ();
+				aim.add(f.topLeft.topLeft.topLeft);
+				aim.add(f.topLeft.topLeft.topLeft.topLeft);
+				aim.add(f.topLeft.topLeft.topLeft.topLeft.topLeft);
+				return new Cannon (f, f.topLeft, f.topLeft.topLeft, aim);
+			}
 		}
-
-		//
-		if ((left.test(a, f) && right.test(a, f)) && requestingPlayer) {
-			return new Cannon(f, f.right, f.left);
->>>>>>> NW
 
 		}
 		// NachOben
 		if (toRow > fromRow && ((toRow - fromRow) >= 4) && ((toRow - fromRow) <= 5) && fromCol == toCol) {
+			if(f.top.color==f.color && f.top.top.color == f.color) {
+				LinkedList<Figure>aim = new LinkedList <> ();
+				aim.add(f.top.top.top);
+				aim.add(f.top.top.top.top);
+				aim.add(f.top.top.top.top.top);
+				return new Cannon (f,f.top,f.top.top,aim);
+			}
 
-<<<<<<< HEAD
 		}
 		// NachUnten
 		if (fromRow > toRow && ((fromRow - toRow) >= 4) && ((fromRow - toRow) <= 5) && fromCol == toCol) {
-
+			if(f.bot.color == f.color && f.bot.bot.color == f.color) {
+				LinkedList<Figure> aim = new LinkedList <> ();
+				aim.add(f.bot.bot.bot);
+				aim.add(f.bot.bot.bot.bot);
+				aim.add(f.bot.bot.bot.bot.bot);
+				return new Cannon (f, f.bot, f.bot.bot, aim);
+			}
 		}
 
 		// NachRechts
 		if (toCol > fromCol && ((toCol - fromCol) >= 4) && ((toCol - fromCol) <= 5) && fromRow == toRow) {
-
+			if(f.right.color == f.color && f.right.right.color== f.color) {
+				LinkedList<Figure> aim = new LinkedList <> ();
+				aim.add(f.right.right.right);
+				aim.add(f.right.right.right.right);
+				aim.add(f.right.right.right.right.right);
+				return new Cannon (f, f.right, f.right.right, aim);
+			}
 		}
 		// NachLinks
 		if (fromCol > toCol && ((fromCol - toCol) >= 4) && ((fromCol - toCol) <= 5) && fromRow == toRow) {
-
+			if(f.left.color == f.color && f.left.left.color == f.color) {
+				LinkedList <Figure> aim = new LinkedList <> ();
+				aim.add(f.left.left.left);
+				aim.add(f.left.left.left.left);
+				aim.add(f.left.left.left.left.left);
+				return new Cannon (f,f.left,f.left.left, aim);
+			}
 		}
 		// Diagonal - obenlinks to untenrechts
 		if (fromRow > toRow && toCol > fromCol && (fromRow - toRow) >= 4 && (fromRow - toRow) <= 5
 				&& (toCol - fromCol) <= 4 && (toCol - fromCol) <= 5) {
-
+			if(f.botLeft.color == f.color && f.botLeft.botLeft.color == f.color) {
+				LinkedList<Figure> aim = new LinkedList <> ();
+				aim.add(f.botLeft.botLeft.botLeft);
+				aim.add(f.botLeft.botLeft.botLeft.botLeft);
+				aim.add(f.botLeft.botLeft.botLeft.botLeft.botLeft);
+				return new Cannon (f, f.botRight, f.botRight, aim);
+			}
 		}
 
 		// Diagonal - obenrechts to untenlinks
 		if (fromRow > toRow && fromCol > toCol && (fromRow - toRow) >= 4 && (fromRow - toRow) <= 5
 				&& (fromCol - toCol) <= 4 && (fromCol - toCol) >= 5) {
-
+			if(f.botLeft.color == f.color && f.botLeft.botLeft.color == f.color) {
+				LinkedList<Figure> aim = new LinkedList <> ();
+				aim.add(f.botLeft.botLeft.botLeft);
+				aim.add(f.botLeft.botLeft.botLeft.botLeft);
+				aim.add(f.botLeft.botLeft.botLeft.botLeft.botLeft);
+				return new Cannon (f, f.botLeft, f.botLeft.botLeft, aim);
+			}
 		}
-
-		// if (isWhite(fromCol, fromRow, requestingPlayer)) {
-		//// f = storage.stream().filter(a -> a.column = fromCol&& a.getRow() ==
-		// fromRow).findFirst().get();
-		//
-		// }
-
-		// if((bottom.test(a, f) && top.test(a, f)) && requestingPlayer) {
-		// return new Cannon (f, f.top,f.bot);
-		// }
-		//
-		// if((bottomLeft.test(a, f) && topRight.test(a, f)) && requestingPlayer) {
-		// return new Cannon(f, f.topRight , f.getBotLeft());
-		// }
-		// if((bottomRight.test(a, f) && topLeft.test(a, f)) && requestingPlayer) {
-		// return new Cannon (f, f.botRight , f.topLeft);
-		//
-	}
-	// filter kanonen heraus nur Versuch
-	// storage.stream().filter(a -> a.left != null && a.right != null && a.isWhite()
-	// == requestingPlayer);
-
-	public boolean isShotValid(String move, boolean requestingPlayer, Figure f) {
-
-		String[] moveturn = move.split("-");
-		String from = moveturn[0];
-		char fromCol = from.charAt(0);
-		char fromRow = from.charAt(1);
-		String to = moveturn[1];
-
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
-		// Figure f=null;
-		//
-		// if(isWhite(fromCol,fromRow,requestingPlayer)) {
-		// f= storage.stream().filter(a-> a.column=fromColumn &&
-		// a.getRow()==fromRow).findFirst().get();
-		// }
-
-		// Diagonal - ObenRechts
-
-		// Diagonal - ObenLinks
-=======
-		if ((bottom.test(a, f) && top.test(a, f)) && requestingPlayer) {
-			return new Cannon(f, f.top, f.bot);
-		}
-
-		if ((bottomLeft.test(a, f) && topRight.test(a, f)) && requestingPlayer) {
-			return new Cannon(f, f.topRight, f.getBotLeft());
-		}
-		if ((bottomRight.test(a, f) && topLeft.test(a, f)) && requestingPlayer) {
-			return new Cannon(f, f.botRight, f.topLeft);
-
-		}
-		// filter kanonen heraus nur Versuch
-		// storage.stream().filter(a -> a.left != null && a.right != null && a.isWhite()
-		// == requestingPlayer);
-	}
-
-	public boolean isShotValid(String from, String to, String requestingPlayer, Figure f) {
-
-		char fromCol = from.charAt(0);
-		char fromRow = from.charAt(1);
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
-		// Figure f=null;
-		//
-		// if(isWhite(fromCol,fromRow,requestingPlayer)) {
-		// f= storage.stream().filter(a-> a.column=fromColumn &&
-		// a.getRow()==fromRow).findFirst().get();
-		// }
-
-		// Diagonal - ObenRechts
-
-		// Diagonal - ObenLinks
-
-		// Oben
-		if ((fromRow - toRow <= 4) && fromCol == toCol) {
-			return (storage.stream().filter(a -> (a == f.bot || a == f.bot.bot) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getBot().getBot().isEmpty();
-		}
-		// Left
-		if (fromRow == toRow && (fromCol - toCol <= 4)) {
-			return (storage.stream()
-					.filter(a -> (a == f.right || a == f.right.right) && a.isWhite() == requestingPlayer).count() == 2)
-					&& f.getRight().getRight().isEmpty();
-		}
-
-		// Right
-		if (fromRow == toRow && (toCol - fromCol <= 4)) {
-			return (storage.stream().filter(a -> (a == f.left || a == f.left.left) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getLeft().getLeft().isEmpty();
-		}
-
-		// Unten
-		if ((toRow - fromRow <= 4) && fromCol == toCol) {
-			return (storage.stream().filter(a -> (a == f.top || a == f.top.top) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getTop().getTop().isEmpty();
-		}
-
-		// Diagonal - UntenRechts
-
-		// Diagonal - UntenLinks
-
-		//
-		// if (fromRow-toRow>=4 &&fromCol==toCol) {
-		// storage.stream().filter(a-> top.test(a, f)||top.test(a, new
-		// Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()==2;
-		// }
-		// if(fromRow-toRow<=4 &&fromCol==toCol) {
-		// return (f.bot.bot=f.isWhite() &&f.bot.isWhite()&& f.bot.isWhite()
-		// &&f.bot.bot.bot.isWhite());
-		//
-		// }
-		// in einer Reihe black Richtig?
-		// if(fromRow==toRow && (toCol-fromCol>=4)) {
-		// return storage.stream().filter(a->)
-		//
-		// }
-		// Diagonal
-		// if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4){}
->>>>>>> NW
-
-		// Oben
-		if ((fromRow - toRow <= 4) && fromCol == toCol) {
-			return (storage.stream().filter(a -> (a == f.bot || a == f.bot.bot) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getBot().getBot().isEmpty();
-		}
-		// Left
-		if (fromRow == toRow && (fromCol - toCol <= 4)) {
-			return (storage.stream()
-					.filter(a -> (a == f.right || a == f.right.right) && a.isWhite() == requestingPlayer).count() == 2)
-					&& f.getRight().getRight().isEmpty();
-		}
-
-		// Right
-		if (fromRow == toRow && (toCol - fromCol <= 4)) {
-			return (storage.stream().filter(a -> (a == f.left || a == f.left.left) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getLeft().getLeft().isEmpty();
-		}
-
-		// Unten
-		if ((toRow - fromRow <= 4) && fromCol == toCol) {
-			return (storage.stream().filter(a -> (a == f.top || a == f.top.top) && a.isWhite() == requestingPlayer)
-					.count() == 2) && f.getTop().getTop().isEmpty();
-		}
-
-		// Diagonal - UntenRechts
-
-		// Diagonal - UntenLinks
-
-		//
-		// if (fromRow-toRow>=4 &&fromCol==toCol) {
-		// storage.stream().filter(a-> top.test(a, f)||top.test(a, new
-		// Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()==2;
-		// }
-		// if(fromRow-toRow<=4 &&fromCol==toCol) {
-		// return (f.bot.bot=f.isWhite() &&f.bot.isWhite()&& f.bot.isWhite()
-		// &&f.bot.bot.bot.isWhite());
-		//
-		// }
-		// in einer Reihe black Richtig?
-		// if(fromRow==toRow && (toCol-fromCol>=4)) {
-		// return storage.stream().filter(a->)
-		//
-		// }
-		// Diagonal
-		// if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4){}
-	}
 
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
@@ -287,6 +157,7 @@ public class Board {
 		if ((((Math.abs(fromCol - toCol)) <= 1) && ((toCol - fromCol) <= 1))) {
 			return storage.stream().anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer));
 		}
+		return false;
 	}
 
 	// schlagen

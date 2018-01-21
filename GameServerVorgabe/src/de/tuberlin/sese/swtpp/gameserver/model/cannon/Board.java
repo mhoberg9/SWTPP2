@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 
 public class Board {
 
-	public static FigureHandle storage = null;
+	public static FigureHandler storage = null;
 
 	// topLeft
 	public static BiPredicate<Figure, Figure> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
@@ -46,37 +46,41 @@ public class Board {
 		String from = moveturn[0];
 		char fromCol = from.charAt(0);
 		char fromRow = from.charAt(1);
-		String to = moveturn[1];
-
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
+//		String to = moveturn[1];
+//		char toCol = to.charAt(0);
+//		char toRow = to.charAt(1);
+	
 		Figure f = null;
 
 		if (isWhite(fromCol, fromRow, requestingPlayer)) {
 			f = storage.stream().filter(a -> a.column = fromColumn && a.getRow() == fromRow).findFirst().get();
 		}
+		
+		// 
+		if((left.test(a, f) && right.test(a, f)) && requestingPlayer) {
+			return new Cannon(f, f.right, f.left);
+		}
 
+		if((bottom.test(a, f) && top.test(a, f)) && requestingPlayer) {
+			return new Cannon (f, f.top,f.bot);
+		}
+		
+		if((bottomLeft.test(a, f) && topRight.test(a, f)) && requestingPlayer) {
+			return new Cannon(f, f.topRight , f.getBotLeft());
+		}
+		if((bottomRight.test(a, f) && topLeft.test(a, f)) && requestingPlayer) {
+			return new Cannon (f, f.botRight , f.topLeft);
+		
+	}
 		// filter kanonen heraus nur Versuch
-		storage.stream().filter(a -> a.left != null && a.right != null && a.isWhite() == requestingPlayer);
-
+		//storage.stream().filter(a -> a.left != null && a.right != null && a.isWhite() == requestingPlayer);
+	}
 		/**
 		 * Wichtig 8 F�lle: Diagonal, Schuss nach oben / unten u. links / rechts
 		 * 
 		 * Horizontal Vertikal keine unterscheidung zwischen black und white
-		 * 
-		 * 
-		 * 
-		 * TODO @Malte BiPr�dikate f�r die die einzelnen Kanonenf�lle schreiben: Nach
-		 * folgendem Schema: 2 Figuren als Input
-		 * 
-		 * Zum besseren Verst�ndnis 'f' ist die figur, die angesprochen wird um den
-		 * Schuss zu machen
-		 * 
-		 * Am besten du machst direkt die Filter Befehle
-		 * 
-		 * in Z. 81 ein gutes Bsp
-		 */
-	}
+		*/
+	
 
 	public boolean isShotValid(String move , boolean requestingPlayer, Figure f) {
 		
@@ -113,6 +117,9 @@ public class Board {
 		}
 		
 		//Unten
+		if ((toRow - fromRow <= 4) && fromCol == toCol){
+			return (storage.stream().filter(a -> (a == f.top || a == f.top.top) && a.isWhite() == requestingPlayer).count() ==2) && f.getTop().getTop().isEmpty();
+		}
 		
 		//Diagonal - UntenRechts
 		

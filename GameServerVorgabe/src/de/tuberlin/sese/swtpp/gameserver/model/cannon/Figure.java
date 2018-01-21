@@ -1,5 +1,7 @@
 package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
+import java.util.LinkedList;
+
 public class Figure {
 //	private boolean empty = false;
 //	boolean white = true;
@@ -16,6 +18,7 @@ public class Figure {
 	Figure botRight;
 	Figure botLeft;
 
+	
 	public Figure(String color, char column, int row) {
 
 		this.color=color;

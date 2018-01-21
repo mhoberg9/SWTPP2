@@ -68,6 +68,7 @@ public class FigureHandler extends LinkedList<Figure> {
 way+=""+(char)fromCol+"" +fromRow+";";
 			
 		}
+		return way;
 
 	}
 

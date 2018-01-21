@@ -1,8 +1,9 @@
 package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
 public class Figure {
-	private boolean empty = false;
-	boolean white = true;
+//	private boolean empty = false;
+//	boolean white = true;
+	String color;
 	boolean castle = false;
 	char column;
 	int row;
@@ -15,22 +16,24 @@ public class Figure {
 	Figure botRight;
 	Figure botLeft;
 
-	public Figure(boolean white, char column, int row) {
+	public Figure(String color, char column, int row) {
 
-		this.white = white;
+		this.color=color;
 		this.column = column;
 		this.row = row;
 	}
 
 	public Figure(char column, int row, char c) {
 		if (c == 'b' || c == 'B')
-			this.white = false;
+			this.color="b";
 		if (c == 'B')
 			this.castle = true;
+		if (c=='w'||c=='W')
+			this.color="w";
 		if (c == 'W')
 			this.castle = true;
 		if (c == '1') {
-			this.empty = true;
+			this.color=null;
 
 		}
 		this.column = column;
@@ -40,33 +43,29 @@ public class Figure {
 
 	@Override
 	public String toString() {
-		if (white == true && castle == false)
+		if (color.equals("w") && castle == false)
 			return "w";
-		if (white == true && castle == true)
+		if (color.equals("w") && castle == true)
 			return "W";
-		if (white == false && castle == false)
+		if (color.equals("b") == false && castle == false)
 			return "b";
-		if (empty == true)
+		if(color.equals("b")&& castle==true){
+			return "B";
+		}
 			return "1";
-		return "B";
+		
 
 	}
 
 	public boolean isEmpty() {
-		return empty;
+		return this.color==null;
 	}
 
-	public void setEmpty(boolean empty) {
-		this.empty = empty;
-	}
 
-	public boolean isWhite() {
-		return white;
-	}
 
-	public void setWhite(boolean white) {
-		this.white = white;
-	}
+public boolean isPlayer (String player) {
+	return color.equalsIgnoreCase(player);
+}
 
 	public boolean isCastle() {
 		return castle;
@@ -157,15 +156,6 @@ public class Figure {
 	}
 
 	
-	// Useless if in constructor
-	// public void partFigure(char c) {
-	// if (c == 'b' ||c== 'B')
-	// this.white = false;
-	// if (c == 'B')
-	// this.castle = true;
-	// if (c == 'W')
-	// this.castle = true;
-	//
-	// }
+
 
 }

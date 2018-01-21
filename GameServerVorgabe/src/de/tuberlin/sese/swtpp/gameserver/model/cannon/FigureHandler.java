@@ -3,7 +3,45 @@ package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 import java.util.LinkedList;
 
 public class FigureHandler extends LinkedList<Figure> {
+	
+	
+	public String getTopLeft(String pos){
+		return getString(-1,1,pos);
+		
+	}
+	public String getRight(String pos){
+		return getString(1,0,pos);
+		
+	}
+	public String getLeft(String pos){
+		return getString(-1,0,pos);
+		
+	}
+	public String getTopRight(String pos){
+		return getString(1,1,pos);
+		
+	}
+	public String getTop(String pos){
+		return getString(0,1,pos);
+		
+	}
+	public String getBot(String pos){
+		return getString(0,-1,pos);
+		
+	}
+	public String getBotLeft(String pos){
+		return getString(-1,-1,pos);
+		}
+	public String getBotRight(String pos){
+		return getString(1,-1,pos);
+		
+	}
 
+	
+public String getString(int a, int b, String position) {
+	return ""+(char)a+position.charAt(0)+""+(char)b+position.charAt(2);
+	
+}
 	public void update() {
 		if (this.size() == 100) {
 			for (int i = 0; i < 100; i++) {

@@ -51,10 +51,19 @@ public class Board {
 		char toCol = to.charAt(0);
 		char toRow = to.charAt(1);
 
+<<<<<<< HEAD
 		Figure f = null;
 //		if (f.isPlayer(requestingPlayer)) {
 //			f = storage.stream().filter(a -> a.column = fromCol && a.row == fromRow).findFirst().get();
 
+=======
+		Figure f = null;	
+		f = storage.stream().filter(a -> a.getPosition()==
+			 fromRow).findFirst().get();
+//Warning!
+		if (f.isPlayer(requestingPlayer)) {
+		
+>>>>>>> NW
 
 
 		// Diagonal - untenlinks to obenrechts
@@ -147,6 +156,45 @@ public class Board {
 			}
 		}
 
+<<<<<<< HEAD
+=======
+	
+	}
+	
+
+	public boolean isShotValid(String from,String to, boolean requestingPlayer, Figure f) {
+
+		
+		char fromCol = from.charAt(0);
+		char fromRow = from.charAt(1);
+		char toCol = to.charAt(0);
+		char toRow = to.charAt(1);
+	
+
+		// Diagonal - ObenRechts
+
+		// Diagonal - ObenLinks
+=======
+		if ((bottom.test(a, f) && top.test(a, f)) && requestingPlayer) {
+			return new Cannon(f, f.top, f.bot);
+		}
+
+		if ((bottomLeft.test(a, f) && topRight.test(a, f)) && requestingPlayer) {
+			return new Cannon(f, f.topRight, f.getBotLeft());
+		}
+		if ((bottomRight.test(a, f) && topLeft.test(a, f)) && requestingPlayer) {
+			return new Cannon(f, f.botRight, f.topLeft);
+
+		}
+		// filter kanonen heraus nur Versuch
+		// storage.stream().filter(a -> a.left != null && a.right != null && a.isWhite()
+		// == requestingPlayer);
+	}
+
+
+	}
+
+>>>>>>> NW
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
 		char fromCol = from.charAt(0);

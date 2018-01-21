@@ -33,32 +33,70 @@ public class Board {
 
 		if (requestingPlayer = false) {
 			return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
-					|| left.test(a, f) || right.test(a, f) && !requestingPlayer);
+					|| left.test(a, f) || right.test(a, f) && a.white==true);
 		} else {
 			return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a, f) || bottom.test(a, f)
-					|| bottomRight.test(a, f) || right.test(a, f) && !requestingPlayer);
+					|| bottomRight.test(a, f) || right.test(a, f) && a.white==false);
 		}
 	}
 
 	// check if figure is cannon
-	public boolean isCannon(String unit, boolean requestingPlayer) {
+	public boolean isCannonValid(String move, boolean requestingPlayer) {
+		String[]moveturn=move.split("-");
+		String from =moveturn[0];
+		char fromCol = from.charAt(0);
+		char fromRow= from.charAt(1);
+		String to = moveturn[1];
+		
+		char toCol = to.charAt(0);
+		char toRow= to.charAt(1);
+		Figure f= new Figure(requestingPlayer,fromCol,(int)fromRow);
+		//in einer Spalte black
+		if (fromRow-toRow>=4 &&fromCol==toCol) {
+			storage.stream().filter(a-> top.test(a, f)||top.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()=2;
+		}
+		//in einer Reihe black
+		if (fromRow==toRow && (toCol-fromCol <=4||toCol-fromCol<=4))
+			
+		if(fromRow==toRow && (toCol-fromCol>=4))
+			storage.stream().filter(a-> left.test(a, f)||left.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()=2;
+			
+		//Diagonal
+		if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4)
+		
+		
 
 	}
 
-	public boolean normalMove(String move) {
+	public boolean normalMoveBlack(String move, boolean requestingPlayer) {
 
-		Figure f;
-		// vorne frei
-		storage.stream().anyMatch(a -> a.column == f.column && a.row == f.row);
+		String[] moveturn = move.split("-");
+		String from = moveturn[0];
+		char fromCol = from.charAt(0);
+		char fromRow = from.charAt(1);
+		String to = moveturn[1];
+
+		char toCol = to.charAt(0);
+		char toRow = to.charAt(1);
+		if ((((Math.abs(fromCol - toCol)) <= 1) && ((toCol - fromCol) <= 1))) {
+			return storage.stream().anyMatch(a -> a.column == toCol && a.row == toRow && a.white == requestingPlayer);
+		}
 	}
 
-	public boolean leftOrRight(String unit) { // ist auf linker oder rechten Seite ein Gegner
-<<<<<<< HEAD
+	// schlagen
+	public boolean leftOrRight(String move, boolean requestingPlayer) { // ist auf linker oder rechten Seite ein Gegner
+		String[] moveturn = move.split("-");
+		String from = moveturn[0];
+		char fromCol = from.charAt(0);
+		char fromRow = from.charAt(1);
+		String to = moveturn[1];
+		char toCol = to.charAt(0);
+		char toRow = to.charAt(1);
 
-=======
-	
-	
->>>>>>> NW
+		if (fromRow == toRow && toCol == fromCol - 1 || fromCol + 1 == toCol) {
+			return storage.stream().anyMatch(a -> a.column == toCol && a.row == toRow && a.white == !requestingPlayer);
+		}
+		return false;
 	}
 
 	public static String getBoard() {
@@ -69,6 +107,10 @@ public class Board {
 				s += "//";
 		}
 		return s;
+	}
+
+	private boolean isWhite(char column, int row, boolean requestedPlayer) {
+		return storage.stream().anyMatch(a -> a.column == column && a.row == row && a.white == requestedPlayer);
 	}
 
 }

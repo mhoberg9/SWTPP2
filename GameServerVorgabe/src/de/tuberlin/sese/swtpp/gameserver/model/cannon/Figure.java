@@ -1,11 +1,19 @@
 package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
 public class Figure {
-private	boolean empty = false;
+	private boolean empty = false;
 	boolean white = true;
 	boolean castle = false;
 	char column;
 	int row;
+	Figure top;
+	Figure topLeft;
+	Figure topRight;
+	Figure left;
+	Figure right;
+	Figure bot;
+	Figure botRight;
+	Figure botLeft;
 
 	public Figure(boolean white, char column, int row) {
 

@@ -25,6 +25,8 @@ public class Board {
 	// bottomRight
 	public static BiPredicate<Figure, Figure> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
 
+	
+	//Check if threat 
 	public boolean inDanger(String moveBeginning, boolean requestingPlayer) {
 
 		char column = moveBeginning.charAt(0);
@@ -56,9 +58,14 @@ public class Board {
 			f = storage.stream().filter(a -> a.column = fromColumn && a.getRow() == fromRow).findFirst().get();
 		}
 		
-		// 
+		
+		
+		/**
+		 * Check if Figure is cannon
+		 */
+		
 		if((left.test(a, f) && right.test(a, f)) && requestingPlayer) {
-			return new Cannon(f, f.right, f.left);
+			return storage.stream().filter(a -> );
 		}
 
 		if((bottom.test(a, f) && top.test(a, f)) && requestingPlayer) {
@@ -124,8 +131,7 @@ public class Board {
 		//Diagonal - UntenRechts
 		
 		//Diagonal - UntenLinks
-		
-		
+	
 		//
 //		if (fromRow-toRow>=4 &&fromCol==toCol) {
 //			storage.stream().filter(a-> top.test(a, f)||top.test(a, new Figure(requestedPlayer,fromCol,(int)fromRow+1))).count()==2;
@@ -141,9 +147,6 @@ public class Board {
 		//}
 		//Diagonal
 		//if(Math.abs(fromRow-toRow)>=4 && Math.abs(fromCol-toCol)>=4){}
-		
-		
-
 	}
 
 	public boolean normalMoveBlack(String move, boolean requestingPlayer) {

@@ -5,6 +5,7 @@ public class Figure {
 //	boolean white = true;
 	String color;
 	boolean castle = false;
+	String postion;
 	char column;
 	int row;
 	Figure top;
@@ -155,7 +156,13 @@ public boolean isPlayer (String player) {
 		this.botLeft = botLeft;
 	}
 
-	
+	public char getCol() {
+		return this.postion.charAt(0);
+	}
+	public int getRo() {
+		return this.postion.charAt(1);
+		
+	}
 
 
 }

@@ -3,8 +3,8 @@ package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 import java.util.LinkedList;
 
 public class Figure {
-//	private boolean empty = false;
-//	boolean white = true;
+	// private boolean empty = false;
+	// boolean white = true;
 	String color;
 	boolean castle = false;
 	String postion;
@@ -19,30 +19,39 @@ public class Figure {
 	Figure botRight;
 	Figure botLeft;
 
-	
 	public Figure(String color, char column, int row) {
 
-		this.color=color;
+		this.color = color;
 		this.column = column;
 		this.row = row;
+		this.postion = "" + column + "" + row;
 	}
 
 	public Figure(char column, int row, char c) {
 		if (c == 'b' || c == 'B')
-			this.color="b";
+			this.color = "b";
 		if (c == 'B')
 			this.castle = true;
-		if (c=='w'||c=='W')
-			this.color="w";
+		if (c == 'w' || c == 'W')
+			this.color = "w";
 		if (c == 'W')
 			this.castle = true;
 		if (c == '1') {
-			this.color=null;
+			this.color = null;
 
 		}
 		this.column = column;
 		this.row = row;
+		this.postion = "" + column + "" + row;
 
+	}
+
+	public String getPostion() {
+		return postion;
+	}
+
+	public void setPostion(String postion) {
+		this.postion = postion;
 	}
 
 	@Override
@@ -53,23 +62,20 @@ public class Figure {
 			return "W";
 		if (color.equals("b") == false && castle == false)
 			return "b";
-		if(color.equals("b")&& castle==true){
+		if (color.equals("b") && castle == true) {
 			return "B";
 		}
-			return "1";
-		
+		return "1";
 
 	}
 
 	public boolean isEmpty() {
-		return this.color==null;
+		return this.color == null;
 	}
 
-
-
-public boolean isPlayer (String player) {
-	return color.equalsIgnoreCase(player);
-}
+	public boolean isPlayer(String player) {
+		return color.equalsIgnoreCase(player);
+	}
 
 	public boolean isCastle() {
 		return castle;
@@ -162,10 +168,10 @@ public boolean isPlayer (String player) {
 	public char getCol() {
 		return this.postion.charAt(0);
 	}
+
 	public int getRo() {
 		return this.postion.charAt(1);
-		
-	}
 
+	}
 
 }

@@ -230,7 +230,7 @@ public class CannonGame extends Game implements Serializable {
 			}
 			b = 0;
 		}
-		Board.storage.update();
+	
 		
 	}
 

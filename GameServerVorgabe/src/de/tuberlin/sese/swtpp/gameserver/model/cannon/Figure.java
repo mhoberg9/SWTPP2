@@ -6,18 +6,9 @@ public class Figure {
 	// private boolean empty = false;
 	// boolean white = true;
 	String color;
-	boolean castle = false;
 	String postion;
 	char column;
 	int row;
-	Figure top;
-	Figure topLeft;
-	Figure topRight;
-	Figure left;
-	Figure right;
-	Figure bot;
-	Figure botRight;
-	Figure botLeft;
 
 	public Figure(String color, char column, int row) {
 
@@ -28,14 +19,14 @@ public class Figure {
 	}
 
 	public Figure(char column, int row, char c) {
-		if (c == 'b' || c == 'B')
-			this.color = "b";
-		if (c == 'B')
-			this.castle = true;
-		if (c == 'w' || c == 'W')
-			this.color = "w";
-		if (c == 'W')
-			this.castle = true;
+		// if (c == 'b' || c == 'B')
+		// this.color = "b";
+		// if (c == 'B')
+		// this.castle = true;
+		// if (c == 'w' || c == 'W')
+		// this.color = "w";
+		// if (c == 'W')
+		// this.castle = true;
 		if (c == '1') {
 			this.color = null;
 
@@ -56,17 +47,27 @@ public class Figure {
 
 	@Override
 	public String toString() {
-		if (color.equals("w") && castle == false)
-			return "w";
-		if (color.equals("w") && castle == true)
-			return "W";
-		if (color.equals("b") == false && castle == false)
-			return "b";
-		if (color.equals("b") && castle == true) {
-			return "B";
-		}
+		// if (color.equals("w") && castle == false)
+		// return "w";
+		// if (color.equals("w") && castle == true)
+		// return "W";
+		// if (color.equals("b") == false && castle == false)
+		// return "b";
+		// if (color.equals("b") && castle == true) {
+		// return "B";
+		// }
+		if (color != null)
+			return color;
 		return "1";
 
+	}
+
+	public boolean isSolider() {
+		return !color.equals(color.toUpperCase());
+	}
+
+	public boolean isCastle() {
+		return !color.equals(color.toLowerCase());
 	}
 
 	public boolean isEmpty() {
@@ -75,14 +76,6 @@ public class Figure {
 
 	public boolean isPlayer(String player) {
 		return color.equalsIgnoreCase(player);
-	}
-
-	public boolean isCastle() {
-		return castle;
-	}
-
-	public void setCastle(boolean castle) {
-		this.castle = castle;
 	}
 
 	public char getColumn() {
@@ -101,68 +94,12 @@ public class Figure {
 		this.row = row;
 	}
 
-	public Figure getTop() {
-		return top;
+	public String getColor() {
+		return color;
 	}
 
-	public void setTop(Figure top) {
-		this.top = top;
-	}
-
-	public Figure getTopLeft() {
-		return topLeft;
-	}
-
-	public void setTopLeft(Figure topLeft) {
-		this.topLeft = topLeft;
-	}
-
-	public Figure getTopRight() {
-		return topRight;
-	}
-
-	public void setTopRight(Figure topRight) {
-		this.topRight = topRight;
-	}
-
-	public Figure getLeft() {
-		return left;
-	}
-
-	public void setLeft(Figure left) {
-		this.left = left;
-	}
-
-	public Figure getRight() {
-		return right;
-	}
-
-	public void setRight(Figure right) {
-		this.right = right;
-	}
-
-	public Figure getBot() {
-		return bot;
-	}
-
-	public void setBot(Figure bot) {
-		this.bot = bot;
-	}
-
-	public Figure getBotRight() {
-		return botRight;
-	}
-
-	public void setBotRight(Figure botRight) {
-		this.botRight = botRight;
-	}
-
-	public Figure getBotLeft() {
-		return botLeft;
-	}
-
-	public void setBotLeft(Figure botLeft) {
-		this.botLeft = botLeft;
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	public char getCol() {
@@ -174,4 +111,7 @@ public class Figure {
 
 	}
 
+	public void destroy() {
+		color="1";
+	}
 }

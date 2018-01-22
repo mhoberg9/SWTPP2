@@ -29,19 +29,35 @@ public class Board {
 	// bottomRight
 	public static BiPredicate<Figure, Figure> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
 
-	public boolean inDanger(String moveBeginning, String requestingPlayer) {
-
-		char column = moveBeginning.charAt(0);
-		int row = (int) moveBeginning.charAt(1);
-		Figure f = new Figure(requestingPlayer, column, row);
-
-		if (requestingPlayer.equalsIgnoreCase("b")) {
-			return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
-					|| left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
-		} else {
-			return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a, f) || bottom.test(a, f)
-					|| bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
+	
+	public boolean inDanger(List <String> posFields, String requestingPlayer) {
+		List <String> tempList2 = posFields.subList(0, 4);
+		List <Figure> tempList = storage.stream().filter(a -> tempList2.contains(a.getPostion())).collect(Collectors.toList());
+		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer)); 
 		}
+		
+		
+	public List <String> retreat(List <String> posFields, String requestingPlayer, String move) {
+		
+		List <String> tempList = posFields.subList(5, 10);
+		
+		List <Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion())).collect(Collectors.toList());
+		
+		return null;
+		
+		
+		
+		
+//		char column = moveBeginning.charAt(0);
+//		int row = (int) moveBeginning.charAt(1);
+//		Figure f = new Figure(requestingPlayer, column, row);
+//
+//		if (requestingPlayer.equalsIgnoreCase("b")) {
+//			return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
+//					|| left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
+//		} else {
+//			return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a, f) || bottom.test(a, f)
+//					|| bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
 	}
 
 	// �berpr�fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
@@ -133,72 +149,91 @@ public class Board {
 	 *       eine Burg ist
 	 */
 
-	public List<Figure> playableFigure() {
+	public List<Figure> playableFigure(String requestingPlayer) {
 
 		List<Figure> lplay = null;
 		List<Figure> l = storage.stream().filter(a -> a.isSolider()).collect(Collectors.toList());
 		List<Figure> lplayw = null;
 		List<Figure> lplayb = null;
+
 		
-		for(Figure help : l) {
-			if(help.getColor().equals("w")) {
-				lplayw = (l.stream().filter(a -> ((inDanger(help.getPostion(), help.getColor()) && (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
-									|| !right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
-									|| !bottomLeft.test(a, help) || !bottomRight.test(a, help)))) || ((!inDanger(help.getPostion(), help.getColor() )&& (!right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
-							|| !bottomLeft.test(a, help) || !bottomRight.test(a, help))))).collect(Collectors.toList()));
-			} else { 
-				lplayb = (l.stream().filter(a -> ((inDanger(help.getPostion(), help.getColor()) && (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
-									|| !right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
-									|| !bottomLeft.test(a, help) || !bottomRight.test(a, help))) || ((!inDanger(help.getPostion(),help.getColor()) && (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
-											|| !right.test(a, help) || !left.test(a, help)))))).collect(Collectors.toList()));
+		for (Figure help : l) {
+			if (help.isPlayer(requestingPlayer)) {
+				lplayw = (l.stream()
+						.filter(a -> ((inDanger(help.getPostion(), help.getColor())
+								&& (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
+										|| !right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
+										|| !bottomLeft.test(a, help) || !bottomRight.test(a, help))))
+								|| ((!inDanger(help.getPostion(), help.getColor())
+										&& (!right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
+												|| !bottomLeft.test(a, help) || !bottomRight.test(a, help)))))
+						.collect(Collectors.toList()));
+			} else {
+				lplayb = (l.stream()
+						.filter(a -> ((inDanger(help.getPostion(), help.getColor())
+								&& (!top.test(a, help)
+										|| !topLeft.test(a, help) || !topRight.test(a, help) || !right.test(a, help)
+										|| !left.test(a, help) || !bottom.test(a, help) || !bottomLeft.test(a, help)
+										|| !bottomRight.test(a, help)))
+								|| ((!inDanger(help.getPostion(), help.getColor())
+										&& (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
+												|| !right.test(a, help) || !left.test(a, help))))))
+						.collect(Collectors.toList()));
 			}
 			lplay.addAll(lplayw);
 			lplay.addAll(lplayb);
 		}
 		return lplay;
 
-//		for (Figure h : l) {
-//			if (h.color.equals("w")) {
-//				if (inDanger(h.postion, h.color)) {
-//					if (l.stream()
-//							.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
-//									|| !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
-//									|| !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
-//						lplay.add(h);
-//					}
-//				} else {
-//					if (l.stream().filter(a -> !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
-//							|| !bottomLeft.test(a, h) || !bottomRight.test(a, h)) != null) {
-//						lplay.add(h);
-//					}
-//				}
-//			} else {
-//				if (inDanger(h.postion, h.color)) {
-//					if (l.stream()
-//							.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
-//									|| !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
-//									|| !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
-//						lplay.add(h);
-//					}
-//				} else {
-//					if (l.stream().filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
-//							|| !right.test(a, h) || !left.test(a, h))) != null) {
-//						lplay.add(h);
-//					}
-//				}
-//
-//			}
-//		}
-//		return lplay;
-//
-//		// 1. Suche Elemente mit color != 1 & !=isCastle() add to List
-//		// 2. Nehme mit schleife jedes Element und check predicate
-//		// 3. sofern min. 1 freies feld und/oder inDanger= true adde to list
-//		// return new List mit benutzbaren Elementen
+		// for (Figure h : l) {
+		// if (h.color.equals("w")) {
+		// if (inDanger(h.postion, h.color)) {
+		// if (l.stream()
+		// .filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
+		// || !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
+		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
+		// lplay.add(h);
+		// }
+		// } else {
+		// if (l.stream().filter(a -> !right.test(a, h) || !left.test(a, h) ||
+		// !bottom.test(a, h)
+		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h)) != null) {
+		// lplay.add(h);
+		// }
+		// }
+		// } else {
+		// if (inDanger(h.postion, h.color)) {
+		// if (l.stream()
+		// .filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
+		// || !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
+		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
+		// lplay.add(h);
+		// }
+		// } else {
+		// if (l.stream().filter(a -> (!top.test(a, h) || !topLeft.test(a, h) ||
+		// !topRight.test(a, h)
+		// || !right.test(a, h) || !left.test(a, h))) != null) {
+		// lplay.add(h);
+		// }
+		// }
+		//
+		// }
+		// }
+		// return lplay;
+		//
+		// // 1. Suche Elemente mit color != 1 & !=isCastle() add to List
+		// // 2. Nehme mit schleife jedes Element und check predicate
+		// // 3. sofern min. 1 freies feld und/oder inDanger= true adde to list
+		// // return new List mit benutzbaren Elementen
 	}
 
-	public boolean canStillPlay() {
-		return true;
+	public boolean canStillPlay(List <Figure> lplay , String requestingPlayer) {
+		if (lplay.contains(requestingPlayer)) {
+			return true;
+		}else {
+		return false;
 	}
 
 }
+	
+}	

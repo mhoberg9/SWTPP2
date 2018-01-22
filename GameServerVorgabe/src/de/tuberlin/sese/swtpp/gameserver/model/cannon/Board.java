@@ -1,8 +1,9 @@
 package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
-import java.util.LinkedList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -43,109 +44,37 @@ public class Board {
 		}
 	}
 
+	// Überprüfung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
+	// auf toMove
+	public boolean isCannonAndCanFire(String fromMove, String toMove, String requestingPlayer) {
+		List l = storage.findWay(fromMove, toMove);
+		List<String> l2 = storage.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Figure::getPostion)
+				.collect(Collectors.toList());
+		boolean free = storage.stream().anyMatch((a -> a.getPostion().equals(l.get(3)) && a.isEmpty()));
+		// l.sublist to check whether it is a cannon
+		return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
+
+	}
+
+	// @TODO Verschiebung mittels swap
+	// kann auch eine Liste von Figuren wiedergeben, die Verschoben werden müssen
+	public boolean isCannonAndCanMove(String fromMove, String toMove, String requestingPlayer) {
+		List moves = storage.findWay(fromMove, toMove);
+		List<String> possibleMoves = storage.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Figure::getPostion)
+				.collect(Collectors.toList());
+		if (moves.size() == 4) {
+			if (possibleMoves.contains(moves.subList(0, 3))
+					&& storage.stream().anyMatch(a -> a.getPostion().equals(moves.get(4)) && a.isEmpty()))
+				;
+			// Es handelt sich um eine Verschiebung nun muss nurnoch Verschoben werden
+		}
+		return false;
+	}
+
+	// @Todo Methode swap muss implementiert werden und inhalt der Figurenfelder
+	// Swappen
+
 	// check if figure is cannon
-	public Cannon isCannonValid(String from,String to, String requestingPlayer) {
-	
-		char fromCol = from.charAt(0);
-		char fromRow = from.charAt(1);
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
-
-		Figure f = null;
-//		if (f.isPlayer(requestingPlayer)) {
-//			f = storage.stream().filter(a -> a.column = fromCol && a.row == fromRow).findFirst().get();
-
-
-
-		// Diagonal - untenlinks to obenrechts
-		if (toRow > fromRow && toCol > fromCol && (toRow - fromRow) >= 4 && (toRow - fromRow) <= 5
-				&& ((toCol - fromCol) >= 4) && ((toCol - fromCol) <= 5)) {
-			if ((f.topRight.color == f.color && f.topRight.topRight.color == f.color) ) {
-				LinkedList<Figure>aim = new LinkedList <> ();
-				aim.add(f.topRight.topRight.topRight);
-				aim.add(f.topRight.topRight.topRight.topRight);
-				aim.add(f.topRight.topRight.topRight.topRight.topRight);
-				return new Cannon (f, f.topRight, f.topRight.topRight, aim);
-		}
-
-		// Diagonal - untenrechts to obenrechts
-		if (toRow > fromRow && fromCol > toCol && (toRow - fromRow) >= 4 && (toRow - fromRow) <= 5
-				&& (fromCol - toCol) >= 4 && (fromCol - toCol) <= 5) {
-			if(f.topLeft.color == f.color && f.topLeft.topLeft.color == f.color) {
-				LinkedList<Figure>aim = new LinkedList <> ();
-				aim.add(f.topLeft.topLeft.topLeft);
-				aim.add(f.topLeft.topLeft.topLeft.topLeft);
-				aim.add(f.topLeft.topLeft.topLeft.topLeft.topLeft);
-				return new Cannon (f, f.topLeft, f.topLeft.topLeft, aim);
-			}
-		}
-
-		}
-		// NachOben
-		if (toRow > fromRow && ((toRow - fromRow) >= 4) && ((toRow - fromRow) <= 5) && fromCol == toCol) {
-			if(f.top.color==f.color && f.top.top.color == f.color) {
-				LinkedList<Figure>aim = new LinkedList <> ();
-				aim.add(f.top.top.top);
-				aim.add(f.top.top.top.top);
-				aim.add(f.top.top.top.top.top);
-				return new Cannon (f,f.top,f.top.top,aim);
-			}
-
-		}
-		// NachUnten
-		if (fromRow > toRow && ((fromRow - toRow) >= 4) && ((fromRow - toRow) <= 5) && fromCol == toCol) {
-			if(f.bot.color == f.color && f.bot.bot.color == f.color) {
-				LinkedList<Figure> aim = new LinkedList <> ();
-				aim.add(f.bot.bot.bot);
-				aim.add(f.bot.bot.bot.bot);
-				aim.add(f.bot.bot.bot.bot.bot);
-				return new Cannon (f, f.bot, f.bot.bot, aim);
-			}
-		}
-
-		// NachRechts
-		if (toCol > fromCol && ((toCol - fromCol) >= 4) && ((toCol - fromCol) <= 5) && fromRow == toRow) {
-			if(f.right.color == f.color && f.right.right.color== f.color) {
-				LinkedList<Figure> aim = new LinkedList <> ();
-				aim.add(f.right.right.right);
-				aim.add(f.right.right.right.right);
-				aim.add(f.right.right.right.right.right);
-				return new Cannon (f, f.right, f.right.right, aim);
-			}
-		}
-		// NachLinks
-		if (fromCol > toCol && ((fromCol - toCol) >= 4) && ((fromCol - toCol) <= 5) && fromRow == toRow) {
-			if(f.left.color == f.color && f.left.left.color == f.color) {
-				LinkedList <Figure> aim = new LinkedList <> ();
-				aim.add(f.left.left.left);
-				aim.add(f.left.left.left.left);
-				aim.add(f.left.left.left.left.left);
-				return new Cannon (f,f.left,f.left.left, aim);
-			}
-		}
-		// Diagonal - obenlinks to untenrechts
-		if (fromRow > toRow && toCol > fromCol && (fromRow - toRow) >= 4 && (fromRow - toRow) <= 5
-				&& (toCol - fromCol) <= 4 && (toCol - fromCol) <= 5) {
-			if(f.botLeft.color == f.color && f.botLeft.botLeft.color == f.color) {
-				LinkedList<Figure> aim = new LinkedList <> ();
-				aim.add(f.botLeft.botLeft.botLeft);
-				aim.add(f.botLeft.botLeft.botLeft.botLeft);
-				aim.add(f.botLeft.botLeft.botLeft.botLeft.botLeft);
-				return new Cannon (f, f.botRight, f.botRight, aim);
-			}
-		}
-
-		// Diagonal - obenrechts to untenlinks
-		if (fromRow > toRow && fromCol > toCol && (fromRow - toRow) >= 4 && (fromRow - toRow) <= 5
-				&& (fromCol - toCol) <= 4 && (fromCol - toCol) >= 5) {
-			if(f.botLeft.color == f.color && f.botLeft.botLeft.color == f.color) {
-				LinkedList<Figure> aim = new LinkedList <> ();
-				aim.add(f.botLeft.botLeft.botLeft);
-				aim.add(f.botLeft.botLeft.botLeft.botLeft);
-				aim.add(f.botLeft.botLeft.botLeft.botLeft.botLeft);
-				return new Cannon (f, f.botLeft, f.botLeft.botLeft, aim);
-			}
-		}
 
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
@@ -183,6 +112,31 @@ public class Board {
 				s += "//";
 		}
 		return s;
+	}
+
+	public static void swap(String fromM, String toM) {
+		Figure first = storage.stream().filter(a -> a.getPostion().equals(fromM)).findFirst().get();
+		Figure last = storage.stream().filter(a -> a.getPostion().equals(toM)).findFirst().get();
+
+		String tempColor = first.getColor();
+		first.setColor(last.getColor());
+		last.setColor(tempColor);
+	}
+
+	public static void destroy(String destination) {
+		storage.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().setColor("1");
+	}
+
+	/**
+	 * 
+	 * @TODO
+	 *
+	 * 		finde ein Element, was vor sich frei hat, zum Spieler gehört und nicht
+	 *       eine Burg ist
+	 */
+
+	public boolean canStillPlay() {
+		return true;
 	}
 
 }

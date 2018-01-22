@@ -44,7 +44,7 @@ public class Board {
 		}
 	}
 
-	// Überprüfung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
+	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
 	// auf toMove
 	public boolean isCannonAndCanFire(String fromMove, String toMove, String requestingPlayer) {
 		List l = storage.findWay(fromMove, toMove);
@@ -57,7 +57,7 @@ public class Board {
 	}
 
 	// @TODO Verschiebung mittels swap
-	// kann auch eine Liste von Figuren wiedergeben, die Verschoben werden müssen
+	// kann auch eine Liste von Figuren wiedergeben, die Verschoben werden mï¿½ssen
 	public boolean isCannonAndCanMove(String fromMove, String toMove, String requestingPlayer) {
 		List moves = storage.findWay(fromMove, toMove);
 		List<String> possibleMoves = storage.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Figure::getPostion)
@@ -73,8 +73,6 @@ public class Board {
 
 	// @Todo Methode swap muss implementiert werden und inhalt der Figurenfelder
 	// Swappen
-
-	// check if figure is cannon
 
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
@@ -131,9 +129,31 @@ public class Board {
 	 * 
 	 * @TODO
 	 *
-	 * 		finde ein Element, was vor sich frei hat, zum Spieler gehört und nicht
+	 * 		finde ein Element, was vor sich frei hat, zum Spieler gehï¿½rt und nicht
 	 *       eine Burg ist
 	 */
+
+	public List<Figure> playableFigure() {
+
+		List<Figure> l = storage.stream().filter(a -> !a.color.equals("1") && !a.isCastle())
+				.collect(Collectors.toList());
+		List<Figure> lplay = null;
+		for (Figure h : l) {
+			if (l.stream()
+					.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h) || !right.test(a, h)
+							|| !left.test(a, h) || !bottom.test(a, h) || !bottomLeft.test(a, h)
+							|| !bottomRight.test(a, h))) != null) {
+				lplay.add(h);
+			} else {
+				return null;
+			}
+		}
+		return lplay;
+		// 1. Suche Elemente mit color != 1 & !=isCastle() add to List
+		// 2. Nehme mit schleife jedes Element und check predicate
+		// 3. sofern min. 1 freies feld und/oder inDanger= true adde to list
+		// return new List mit benutzbaren Elementen
+	}
 
 	public boolean canStillPlay() {
 		return true;

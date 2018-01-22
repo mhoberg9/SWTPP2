@@ -138,17 +138,52 @@ public class Board {
 		List<Figure> l = storage.stream().filter(a -> !a.color.equals("1") && !a.isCastle())
 				.collect(Collectors.toList());
 		List<Figure> lplay = null;
+		
 		for (Figure h : l) {
-			if (l.stream()
+			if (h.color.equals("w")){
+				if (inDanger(h.postion,h.color)) {
+					if (l.stream()
 					.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h) || !right.test(a, h)
 							|| !left.test(a, h) || !bottom.test(a, h) || !bottomLeft.test(a, h)
 							|| !bottomRight.test(a, h))) != null) {
-				lplay.add(h);
-			} else {
+						lplay.add(h);
+					} else {
 				return null;
+				}
+			} else {
+				if (l.stream()
+						.filter(a -> !right.test(a, h)
+								|| !left.test(a, h) || !bottom.test(a, h) || !bottomLeft.test(a, h)
+								|| !bottomRight.test(a, h)) != null) {
+							lplay.add(h);
+						} else {
+					return null;
+					}
+			}
+		} else {
+			if(inDanger(h.postion, h.color)) {
+				if (l.stream()
+						.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h) || !right.test(a, h)
+								|| !left.test(a, h) || !bottom.test(a, h) || !bottomLeft.test(a, h)
+								|| !bottomRight.test(a, h))) != null) {
+							lplay.add(h);
+						} else {
+					return null;
+					}
+			} else {
+				if (l.stream()
+							.filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
+									|| !right.test(a, h) || !left.test(a, h))) != null) {
+						lplay.add(h);
+					} else {
+						return null;
+					}
+				}
+
 			}
 		}
 		return lplay;
+		
 		// 1. Suche Elemente mit color != 1 & !=isCastle() add to List
 		// 2. Nehme mit schleife jedes Element und check predicate
 		// 3. sofern min. 1 freies feld und/oder inDanger= true adde to list

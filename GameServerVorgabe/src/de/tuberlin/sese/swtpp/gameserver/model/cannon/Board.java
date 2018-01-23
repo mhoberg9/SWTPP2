@@ -29,35 +29,55 @@ public class Board {
 	// bottomRight
 	public static BiPredicate<Figure, Figure> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
 
-	
-	public boolean inDanger(List <String> posFields, String requestingPlayer) {
-		List <String> tempList2 = posFields.subList(0, 4);
-		List <Figure> tempList = storage.stream().filter(a -> tempList2.contains(a.getPostion())).collect(Collectors.toList());
-		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer)); 
-		}
+	public boolean inDanger(List<String> posFields, String requestingPlayer) {
+		List<String> tempList2 = posFields.subList(0, 4);
+		List<Figure> tempList = storage.stream().filter(a -> tempList2.contains(a.getPostion()))
+				.collect(Collectors.toList());
+		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
+	}
+
+	public List<String> retreat(List<String> posFields, String requestingPlayer, String move) {
+
+		List<String> tempList = posFields.subList(5, 10);
+
+		List<Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion()))
+				.collect(Collectors.toList());
+		List<Figure> emptyList = storage.stream().filter(a -> a.isEmpty()).collect(Collectors.toList());
+		
+		return emptyList.stream().filter(a -> tempList2
+				.contains((a.getPostion().equals(tempList.get(0)) && a.getPostion().equals(tempList.get(3)))
+						|| (a.getPostion().equals(tempList.get(1)) && a.getPostion().equals(tempList.get(4)))
+						|| (a.getPostion().equals(tempList.get(2)) && (a.getPostion().equals(tempList.get(5))))))
+				.map(a -> a.getPostion()).collect(Collectors.toList());
 		
 		
-	public List <String> retreat(List <String> posFields, String requestingPlayer, String move) {
 		
-		List <String> tempList = posFields.subList(5, 10);
-		
-		List <Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion())).collect(Collectors.toList());
-		
-		return null;
-		
-		
-		
-		
-//		char column = moveBeginning.charAt(0);
-//		int row = (int) moveBeginning.charAt(1);
-//		Figure f = new Figure(requestingPlayer, column, row);
-//
-//		if (requestingPlayer.equalsIgnoreCase("b")) {
-//			return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f) || topLeft.test(a, f)
-//					|| left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
-//		} else {
-//			return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a, f) || bottom.test(a, f)
-//					|| bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) == false);
+		// tempList2.stream().filter(a -> tempList.get(0).isEmpty()).).
+		// tempList2.stream().filter(a ->
+		// a.getPostion(tempList2.get(0).isEmpty())).collect(Collectors.toList());
+		// tempList2.stream().filter(a -> (a.getPostion().equals(tempList.get(0))&&
+		// a.getPostion().equals(tempList.get(3)) && a.isEmpty()) ||
+		// a.getPostion().equals(tempList))).collect(Collectors.toList());
+
+		// return emptyList.stream().filter(a ->
+		// emptyList.contains((a.getPostion().equals(tempList[0]) &&
+		// a.getPostion().equals(tempList[3])))).map(a ->
+		// a.getPostion().collect(Collectors.toList()));
+
+		// char column = moveBeginning.charAt(0);
+		// int row = (int) moveBeginning.charAt(1);
+		// Figure f = new Figure(requestingPlayer, column, row);
+		//
+		// if (requestingPlayer.equalsIgnoreCase("b")) {
+		// return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f)
+		// || topLeft.test(a, f)
+		// || left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) ==
+		// false);
+		// } else {
+		// return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a,
+		// f) || bottom.test(a, f)
+		// || bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer)
+		// == false);
 	}
 
 	// �berpr�fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
@@ -156,7 +176,6 @@ public class Board {
 		List<Figure> lplayw = null;
 		List<Figure> lplayb = null;
 
-		
 		for (Figure help : l) {
 			if (help.isPlayer(requestingPlayer)) {
 				lplayw = (l.stream()
@@ -227,13 +246,13 @@ public class Board {
 		// // return new List mit benutzbaren Elementen
 	}
 
-	public boolean canStillPlay(List <Figure> lplay , String requestingPlayer) {
+	public boolean canStillPlay(List<Figure> lplay, String requestingPlayer) {
 		if (lplay.contains(requestingPlayer)) {
 			return true;
-		}else {
-		return false;
+		} else {
+			return false;
+		}
+
 	}
 
 }
-	
-}	

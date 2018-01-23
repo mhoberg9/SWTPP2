@@ -31,12 +31,7 @@ public class Board {
 	/**
 	 * checks whether unit of Field xy is in danger
 	 */
-	public boolean inDanger(List<String> posFields, String requestingPlayer) {
-		List<String> tempList2 = posFields.subList(0, 4);
-		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
-				.collect(Collectors.toList());
-		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
-	}
+
 
 	/*
 	 * @TODO
@@ -49,16 +44,11 @@ public class Board {
 	 * @param requestingPlayer
 	 * @return
 	 */
-	public List<String> retreat(List<String> posFields, String requestingPlayer) {
-
-		List<String> tempList = posFields.subList(5, 10);
-		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
-				.collect(Collectors.toList());
-
-<<<<<<< HEAD
+	
+	
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
 		List<String> tempList2 = posFields.subList(0, 4);
-		List<Figure> tempList = storage.stream().filter(a -> tempList2.contains(a.getPostion()))
+		List<Figure> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
 				.collect(Collectors.toList());
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
@@ -67,11 +57,10 @@ public class Board {
 
 		List<String> tempList = posFields.subList(5, 10);
 
-		List<Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion()))
+		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
 				.collect(Collectors.toList());
-		//List<Figure> emptyList = tempList2.stream().filter(a -> a.isEmpty()).collect(Collectors.toList());
 		
-		List<String>posRetreat = null;
+		List<String> posRetreat = null;
 		
 		if (tempList2.get(0).isEmpty() && tempList.get(3).isEmpty()) {
 			posRetreat.add(tempList2.get(0).getPostion());
@@ -87,46 +76,6 @@ public class Board {
 		}
 		return posRetreat;
 		
-		// tempList2.stream().filter(a -> tempList.get(0).isEmpty()).).
-		// tempList2.stream().filter(a ->
-		// a.getPostion(tempList2.get(0).isEmpty())).collect(Collectors.toList());
-		// tempList2.stream().filter(a -> (a.getPostion().equals(tempList.get(0))&&
-		// a.getPostion().equals(tempList.get(3)) && a.isEmpty()) ||
-		// a.getPostion().equals(tempList))).collect(Collectors.toList());
-
-		// return emptyList.stream().filter(a ->
-		// emptyList.contains((a.getPostion().equals(tempList[0]) &&
-		// a.getPostion().equals(tempList[3])))).map(a ->
-		// a.getPostion().collect(Collectors.toList()));
-
-		// char column = moveBeginning.charAt(0);
-		// int row = (int) moveBeginning.charAt(1);
-		// Figure f = new Figure(requestingPlayer, column, row);
-		//
-		// if (requestingPlayer.equalsIgnoreCase("b")) {
-		// return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f)
-=======
-		return null;
-
-		// char column = moveBeginning.charAt(0);
-		// int row = (int) moveBeginning.charAt(1);
-		// Field f = new Field(requestingPlayer, column, row);
-		//
-		// if (requestingPlayer.equalsIgnoreCase("b")) {
-		// return fieldList.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f)
->>>>>>> 9425c7abb6149045b4844a90caac9fbd347f7aa0
-		// || topLeft.test(a, f)
-		// || left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) ==
-		// false);
-		// } else {
-<<<<<<< HEAD
-		// return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a,
-=======
-		// return fieldList.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a,
->>>>>>> 9425c7abb6149045b4844a90caac9fbd347f7aa0
-		// f) || bottom.test(a, f)
-		// || bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer)
-		// == false);
 	}
 
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
@@ -135,7 +84,7 @@ public class Board {
 	
 	
 	/**
-	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist überprüfung auch direkt
+	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist ï¿½berprï¿½fung auch direkt
 	 * durch move ohne findway, also to Move is teil von subliste(0,4)
 	 * danach checken ob feld nicht durch eigenen spieler besetzt ist
 	 * 

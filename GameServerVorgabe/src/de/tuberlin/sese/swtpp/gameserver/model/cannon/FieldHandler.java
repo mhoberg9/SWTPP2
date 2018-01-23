@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class FigureHandler extends LinkedList<Figure> {
+public class FieldHandler extends LinkedList<Field> {
 
 	public String getTopLeft(String pos) {
 		return getString(-1, 1, pos);
@@ -50,22 +50,28 @@ public class FigureHandler extends LinkedList<Figure> {
 
 	}
 
+	// public List findWay(String move) {
+	//
+	// }
 	public List findWay(String move) {
-		
+		String fromTo[] = move.split("-");
+		String from = fromTo[0];
+		String to = fromTo[1];
+		return findWay(from, to);
 	}
+
 	public List findWay(String from, String to) {
 
 		int counter = 0;
 		String way = from;
-		ArrayList ls = new ArrayList();
+		ArrayList fields = new ArrayList();
 		int fromCol = (int) from.charAt(0);
 		int fromRow = (int) from.charAt(1);
 		int toCol = (int) to.charAt(0);
 		int toRow = (int) to.charAt(1);
 
-		while (fromCol != toCol && fromRow != toRow && counter != 5) {
-			way = "" + (char) fromCol + "" + fromRow;
-			ls.add(way);
+	do	{	way = "" + (char) fromCol + "" + fromRow;
+			fields.add(way);
 			if (fromCol < toCol)
 				fromCol++;
 			if (fromCol > toCol)
@@ -75,13 +81,48 @@ public class FigureHandler extends LinkedList<Figure> {
 			if (fromRow < toRow)
 				toRow++;
 			counter++;
-		}
-		return ls;
+		}while (fromCol != toCol && fromRow != toRow && counter <6);
+	
+		return fields;
 
 	}
 
-	public List mark(String from, String to) {
-		
+	/**
+	 * This methods marks field surrounding a given field and inverts given matrix
+	 * so that the output list can be used for further computation
+	 * 
+	 * @param field
+	 *            that should be checked
+	 * @param player
+	 *            for who field should be checked. Can be either "b"- black or "w"-
+	 *            white
+	 * @return List of marked fields
+	 */
+	public List mark(String field, String player) {
+		String from;
+		String to;
+		if (player.equalsIgnoreCase("w")) {
+			from = getString(1, -1, field);
+			to = getString(-1, 2, field);
+		} else {
+			from = getString(-1, 1, field);
+			to = getString(1, -2, field);
+		}
+
+		return markFieldsAroundField(field, from, to);
+	}
+
+	/**
+	 * 
+	 * @param from
+	 *            Start position
+	 * @param to
+	 *            Destination position
+	 * @return List that contains all Strings but that surround a field or could be
+	 *         possible turn
+	 */
+	private List markFieldsAroundField(String startField, String from, String to) {
+
 		String field = from;
 		ArrayList ls = new ArrayList();
 		int fromCol = (int) from.charAt(0);
@@ -89,20 +130,23 @@ public class FigureHandler extends LinkedList<Figure> {
 		int toCol = (int) to.charAt(0);
 		int toRow = (int) to.charAt(1);
 		int temp = toCol;
-
 		while (toRow != fromRow) {
 
 			while (toCol != fromCol) {
 				field = "" + (char) fromCol + "" + fromRow;
-				ls.add(field);
-				if (toCol < fromCol) fromCol--;
-				else fromCol++;
+				if (!field.equals(startField))
+					ls.add(field);
+				if (toCol < fromCol)
+					fromCol--;
+				else
+					fromCol++;
+			}
+			toCol = temp;
+			if (fromRow < toRow)
+				fromRow++;
+			else
+				fromRow--;
 		}
-			toCol= temp;
-			if (fromRow < toRow) fromRow++;
-			else fromRow--;
-
-	}
 		return ls;
 	}
 }

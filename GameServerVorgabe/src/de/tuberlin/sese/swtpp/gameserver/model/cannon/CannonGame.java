@@ -225,7 +225,7 @@ public class CannonGame extends Game implements Serializable {
 
 			for (char c : splitted[i].toCharArray()) {
 
-				Board.storage.add(new Figure((char) (97 + b), i, c));
+				Board.fieldList.add(new Field((char) (97 + b), i, c));
 				b++;
 			}
 			b = 0;

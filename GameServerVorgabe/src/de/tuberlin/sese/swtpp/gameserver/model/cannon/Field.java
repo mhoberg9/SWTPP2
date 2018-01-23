@@ -2,15 +2,15 @@ package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
 import java.util.LinkedList;
 
-public class Figure {
+public class Field {
 	// private boolean empty = false;
 	// boolean white = true;
 	String color;
-	String postion;
+	private final String postion;
 	char column;
 	int row;
 
-	public Figure(String color, char column, int row) {
+	public Field(String color, char column, int row) {
 
 		this.color = color;
 		this.column = column;
@@ -18,7 +18,7 @@ public class Figure {
 		this.postion = "" + column + "" + row;
 	}
 
-	public Figure(char column, int row, char c) {
+	public Field(char column, int row, char c) {
 		// if (c == 'b' || c == 'B')
 		// this.color = "b";
 		// if (c == 'B')
@@ -41,9 +41,7 @@ public class Figure {
 		return postion;
 	}
 
-	public void setPostion(String postion) {
-		this.postion = postion;
-	}
+
 
 	@Override
 	public String toString() {

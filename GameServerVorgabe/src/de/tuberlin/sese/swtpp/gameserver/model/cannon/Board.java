@@ -69,15 +69,23 @@ public class Board {
 
 		List<Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion()))
 				.collect(Collectors.toList());
-		List<Figure> emptyList = storage.stream().filter(a -> a.isEmpty()).collect(Collectors.toList());
+		//List<Figure> emptyList = tempList2.stream().filter(a -> a.isEmpty()).collect(Collectors.toList());
 		
-		return emptyList.stream().filter(a -> tempList2
-				.contains((a.getPostion().equals(tempList.get(0)) && a.getPostion().equals(tempList.get(3)))
-						|| (a.getPostion().equals(tempList.get(1)) && a.getPostion().equals(tempList.get(4)))
-						|| (a.getPostion().equals(tempList.get(2)) && (a.getPostion().equals(tempList.get(5))))))
-				.map(a -> a.getPostion()).collect(Collectors.toList());
+		List<String>posRetreat = null;
 		
-		
+		if (tempList2.get(0).isEmpty() && tempList.get(3).isEmpty()) {
+			posRetreat.add(tempList2.get(0).getPostion());
+			posRetreat.add(tempList2.get(3).getPostion());
+		}
+		if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
+			posRetreat.add(tempList2.get(1).getPostion());
+			posRetreat.add(tempList2.get(4).getPostion());
+		}
+		if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
+			posRetreat.add(tempList2.get(2).getPostion());
+			posRetreat.add(tempList2.get(5).getPostion());
+		}
+		return posRetreat;
 		
 		// tempList2.stream().filter(a -> tempList.get(0).isEmpty()).).
 		// tempList2.stream().filter(a ->

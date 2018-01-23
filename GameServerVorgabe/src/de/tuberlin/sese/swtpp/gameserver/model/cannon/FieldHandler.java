@@ -59,12 +59,15 @@ public class FieldHandler extends LinkedList<Field> {
 		String to = fromTo[1];
 		return findWay(from, to);
 	}
-
-	public List findWay(String from, String to) {
+/**
+ * 
+@TODO null muss geadded werden, wenn counter <6 ist!!!
+ */
+	public List<String> findWay(String from, String to) {
 
 		int counter = 0;
 		String way = from;
-		ArrayList fields = new ArrayList();
+		ArrayList<String> fields = new ArrayList<String>();
 		int fromCol = (int) from.charAt(0);
 		int fromRow = (int) from.charAt(1);
 		int toCol = (int) to.charAt(0);
@@ -81,7 +84,7 @@ public class FieldHandler extends LinkedList<Field> {
 			if (fromRow < toRow)
 				toRow++;
 			counter++;
-		}while (fromCol != toCol && fromRow != toRow && counter <6);
+		}while (fromCol != toCol && fromRow != toRow && counter <7);
 	
 		return fields;
 

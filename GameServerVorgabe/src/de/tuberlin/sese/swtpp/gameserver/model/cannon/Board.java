@@ -9,8 +9,7 @@ public class Board {
 
 	public static FieldHandler fieldList = null;
 
-	// Test
-	public static TriPredicate<Field, Field, Field> diagonal = (a, b, c) -> a.equals(2);
+	
 	// topLeft
 
 	public static BiPredicate<Field, Field> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
@@ -39,17 +38,17 @@ public class Board {
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
-	
 	/*
 	 * @TODO
 	 * 
 	 */
 	/**
- * @TODO 
- * @param posFields InputList that will be checked for possibilities of retreat
- * @param requestingPlayer
- * @return 
- */
+	 * @TODO
+	 * @param posFields
+	 *            InputList that will be checked for possibilities of retreat
+	 * @param requestingPlayer
+	 * @return
+	 */
 	public List<String> retreat(List<String> posFields, String requestingPlayer) {
 
 		List<String> tempList = posFields.subList(5, 10);
@@ -77,34 +76,75 @@ public class Board {
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
 	// etc
 	// auf toMove
-	public boolean isCannonAndCanFire(String fromMove, String toMove, String requestingPlayer) {
-		List l = fieldList.findWay(fromMove, toMove);
-		List<String> l2 = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
-				.collect(Collectors.toList());
-		boolean free = fieldList.stream().anyMatch((a -> a.getPostion().equals(l.get(3)) && a.isEmpty()));
-		// l.sublist to check whether it is a cannon
-		return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
+	
+	
+	/**
+	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist überprüfung auch direkt
+	 * durch move ohne findway, also to Move is teil von subliste(0,4)
+	 * danach checken ob feld nicht durch eigenen spieler besetzt ist
+	 * 
+	 */
+	
+	/**
+	 * Useless since CannonAction
+	 */
+//	public boolean isCannonAndCanFire(String fromMove, String toMove, String requestingPlayer) {
+//		List l = fieldList.findWay(fromMove, toMove);
+//		List<String> l2 = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
+//				.collect(Collectors.toList());
+//
+//		boolean free = fieldList.stream().anyMatch((a -> a.getPostion().equals(l.get(3)) && a.isEmpty()));
+//		// l.sublist to check whether it is a cannon
+//		return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
 
-	}
-
-	// @TODO Verschiebung mittels swap
-	// kann auch eine Liste von Figuren wiedergeben, die Verschoben werden mï¿½ssen
-	public boolean isCannonAndCanMove(String fromMove, String toMove, String requestingPlayer) {
-		List moves = fieldList.findWay(fromMove, toMove);
+//	}
+/**
+ * @TODO
+ * check type safety for findway!!!
+ * 
+ * 
+ * @param fromMove
+ * @param toMove
+ * @param requestingPlayer
+ * @return
+ */
+	public List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
+		List<String> moves = fieldList.findWay(fromMove, toMove);
 		List<String> possibleMoves = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
 				.collect(Collectors.toList());
-		if (moves.size() == 4) {
-			if (possibleMoves.contains(moves.subList(0, 3))
-					&& fieldList.stream().anyMatch(a -> a.getPostion().equals(moves.get(4)) && a.isEmpty()))
-				;
-			// Es handelt sich um eine Verschiebung nun muss nurnoch Verschoben werden
-		}
-		return false;
+
+		if (possibleMoves.containsAll(moves.subList(0, 3))
+				&& fieldList.stream().anyMatch(f -> f.getPostion().equals(moves.get(3)) && f.isEmpty()))
+			return moves;
+		else
+			return Arrays.asList("FAILED!");
+
 	}
 
-	// @Todo Methode swap muss implementiert werden und inhalt der Figurenfelder
-	// Swappen
+	/**
+	 * checks whether field is part of a canon if head is free and it's a move turn
+	 * it swaps fields if head is free and it's a fire turn it destroys the field it
+	 * fires at
+	 * 
+	 * 
+	 * @param fromMove
+	 * @param toMove
+	 * @param requestingPlayer
+	 */
+	public boolean cannonAction(String fromMove, String toMove, String requestingPlayer) {
+		List<String> moves = isCannon(fromMove, toMove, requestingPlayer);
+		if (moves.size() == 4) {
+			swap(moves.get(0), moves.get(1));
+			return true;
+		} else if (moves.size() > 4 && moves.size() < 7) {
+			destroy(moves.get(moves.size() - 1));
+			return true;
+		}
+		return false;
 
+	}
+
+	
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
 		char fromCol = from.charAt(0);
@@ -201,9 +241,11 @@ public class Board {
 		return lplay;
 
 	}
-public List<Field> fieldsFromPositions(List<String> positions){
-	return fieldList.stream().filter(f->positions.contains(f.getPostion())).collect(Collectors.toList());
-}
+
+	public List<Field> fieldsFromPositions(List<String> positions) {
+		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
+	}
+
 	/**
 	 * doesn't work !!!
 	 */

@@ -9,6 +9,7 @@ public class Board {
 
 	public static FieldHandler fieldList = null;
 
+<<<<<<< HEAD
 	// topLeft
 
 	public static BiPredicate<Field, Field> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
@@ -35,6 +36,10 @@ public class Board {
 	 * @TODO
 	 * 
 	 */
+=======
+
+	 
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 	/**
 	 * @TODO
 	 * @param posFields
@@ -44,13 +49,29 @@ public class Board {
 	 */
 
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
+<<<<<<< HEAD
 		List<String> tempList2 = posFields.subList(0, 7);
+=======
+		List<String> tempList2 = posFields.subList(0, 9);
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
 				.collect(Collectors.toList());
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
+<<<<<<< HEAD
 	public List <String> retreat(List<String> posFields) {
+=======
+	/**
+	 * 
+	 * @param posFields
+	 *            Liste aus die durch Algorithmus ausgewählt wurden
+	 * @return
+	 */
+	public List<String> retreatFields(List<String> posFields) {
+
+		List<String> tempList = posFields.subList(5, 10);
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 
 		List<String> tempList = posFields.subList(5, 11);
 		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
@@ -70,8 +91,18 @@ public class Board {
 			posRetreat.add("NO RETREAT");
 		}
 		return posRetreat;
-	}
+<<<<<<< HEAD
+=======
 
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+	}
+public boolean checkRetreat(String to, List<String> possibleRetreatFields){
+	return possibleRetreatFields.contains(to);
+}
+
+
+
+<<<<<<< HEAD
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
 	// etc
 	// auf toMove
@@ -80,8 +111,18 @@ public class Board {
 	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist
 	 * ï¿½berprï¿½fung auch direkt durch move ohne findway, also to Move is teil von
 	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
+=======
+	/**
+	 * @TODO check type safety for findway!!!
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 	 * 
+	 * 
+	 * @param fromMove
+	 * @param toMove
+	 * @param requestingPlayer
+	 * @return
 	 */
+<<<<<<< HEAD
 
 	/**
 	 * Useless since CannonAction
@@ -108,6 +149,8 @@ public class Board {
 	 * @param requestingPlayer
 	 * @return
 	 */
+=======
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 	public List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
 		List<String> moves = fieldList.findWay(fromMove, toMove);
 		List<String> possibleMoves = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
@@ -127,6 +170,8 @@ public class Board {
 	 * fires at
 	 * 
 	 * 
+	 * @TODO checken ob Gegner auf Feld ist!
+	 * 
 	 * @param fromMove
 	 * @param toMove
 	 * @param requestingPlayer
@@ -144,33 +189,33 @@ public class Board {
 
 	}
 
+<<<<<<< HEAD
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
+=======
+	/**
+	
+	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
+	 * isPlayer hat 3-Seitige Logik-> wenn wir Gegnerischen spieler und nicht frei haben wollen müssen wir nicht player und isEmpty nehmen.
+	 */
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 
-		char fromCol = from.charAt(0);
-		char fromRow = from.charAt(1);
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
+	public boolean normalMove(String to, String requestingPlayer, List<String> surroundingFields) {
+		return (surroundingFields.subList(0, 3).contains(to) && fieldList.stream()
+				.filter(f -> !f.isPlayer(requestingPlayer)).map(f -> f.getPostion()).anyMatch(f -> f.equals(to)));
 
-		if ((((Math.abs(fromCol - toCol)) <= 1) && ((toCol - fromCol) <= 1))) {
-			return fieldList.stream()
-					.anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer));
-		}
-		return false;
 	}
 
-	// schlagen
-	public boolean leftOrRight(String from, String to, String requestingPlayer) { // ist auf linker oder rechten Seite
-																					// ein Gegner
-		char fromCol = from.charAt(0);
-		char fromRow = from.charAt(1);
-		char toCol = to.charAt(0);
-		char toRow = to.charAt(1);
+/**
+ * 	
+ * @param to Destination of move
+ * @param requestingPlayer player whose turn it is
+ * @param surroundingFields neighbor fields found by algorithm
+ * @return true if field from has neighbors and could move there
+ */
+	public boolean hasNeighbor(String to, String requestingPlayer, List<String> surroundingFields) { 
+		List<String> neighbor = surroundingFields.subList(3, 5);
+		return (neighbor.contains(to) && fieldList.stream().anyMatch(f -> f.getPostion().equals(to)&& !f.isPlayer(requestingPlayer)&&!f.isEmpty()));
 
-		if (fromRow == toRow && toCol == fromCol - 1 || fromCol + 1 == toCol) {
-			return fieldList.stream()
-					.anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer) == false);
-		}
-		return false;
 	}
 
 	public static String getBoard() {
@@ -196,6 +241,7 @@ public class Board {
 		fieldList.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().destroy();
 	}
 
+<<<<<<< HEAD
 	/**
 	 * 
 	 * @TODO
@@ -216,4 +262,17 @@ public class Board {
 	}
 
 
+=======
+	public void move(String from, String to) {
+		String first = fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().getColor();
+		fieldList.stream().filter(f -> f.getPostion().equals(to)).findFirst().get().setColor(first);
+		fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().destroy();
+
+	}
+
+	public List<Field> fieldsFromPositions(List<String> positions) {
+		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
+	}
+
+>>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 }

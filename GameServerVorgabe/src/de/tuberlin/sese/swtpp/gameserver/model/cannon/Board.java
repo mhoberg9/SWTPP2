@@ -63,15 +63,12 @@ public class Board {
 		List<String> posRetreat = null;
 		
 		if (tempList2.get(0).isEmpty() && tempList.get(3).isEmpty()) {
-			posRetreat.add(tempList2.get(0).getPostion());
 			posRetreat.add(tempList2.get(3).getPostion());
 		}
 		if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
-			posRetreat.add(tempList2.get(1).getPostion());
 			posRetreat.add(tempList2.get(4).getPostion());
 		}
 		if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
-			posRetreat.add(tempList2.get(2).getPostion());
 			posRetreat.add(tempList2.get(5).getPostion());
 		}
 		return posRetreat;

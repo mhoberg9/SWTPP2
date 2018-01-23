@@ -251,7 +251,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 	 */
 
 	public boolean canStillPlay(List <String> posFields, String requestingPlayer) {
-		return posFields.contains((inDanger(posFields, requestingPlayer)) && !retreat(posFields).contains("NO RETREAT") || normalMove() || canHit()));
+		return posFields.contains((inDanger(posFields, requestingPlayer)) && !retreat(posFields).contains("NO RETREAT") || normalMove() || hasNeighbor()));
 	}
 
 

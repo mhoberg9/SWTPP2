@@ -53,7 +53,7 @@ public class Board {
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
-	public List<String> retreat(List<String> posFields, String requestingPlayer, String move) {
+	public List<String> retreat(List<String> posFields) {
 
 		List<String> tempList = posFields.subList(5, 10);
 

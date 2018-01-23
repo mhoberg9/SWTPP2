@@ -7,116 +7,142 @@ import java.util.stream.Collectors;
 
 public class Board {
 
-	public static FigureHandler storage = null;
+	public static FieldHandler fieldList = null;
 
-	// Test
-	public static TriPredicate<Figure, Figure, Figure> diagonal = (a, b, c) -> a.equals(2);
 	// topLeft
 
-	public static BiPredicate<Figure, Figure> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
+	public static BiPredicate<Field, Field> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
 	// top
-	public static BiPredicate<Figure, Figure> top = (a, b) -> a.column == b.column && a.row == b.row + 1;
+	public static BiPredicate<Field, Field> top = (a, b) -> a.column == b.column && a.row == b.row + 1;
 	// topRight
-	public static BiPredicate<Figure, Figure> topRight = (a, b) -> a.column == b.column + 1 && a.row == b.row + 1;
+	public static BiPredicate<Field, Field> topRight = (a, b) -> a.column == b.column + 1 && a.row == b.row + 1;
 	// left
-	public static BiPredicate<Figure, Figure> left = (a, b) -> a.column == b.column - 1 && a.row == b.row;
+	public static BiPredicate<Field, Field> left = (a, b) -> a.column == b.column - 1 && a.row == b.row;
 	// right
-	public static BiPredicate<Figure, Figure> right = (a, b) -> a.column == b.column + 1 && a.row == b.row;
+	public static BiPredicate<Field, Field> right = (a, b) -> a.column == b.column + 1 && a.row == b.row;
 	// bottomLeft
-	public static BiPredicate<Figure, Figure> bottomLeft = (a, b) -> a.column == b.column - 1 && a.row == b.row - 1;
+	public static BiPredicate<Field, Field> bottomLeft = (a, b) -> a.column == b.column - 1 && a.row == b.row - 1;
 	// bottom
-	public static BiPredicate<Figure, Figure> bottom = (a, b) -> a.column == b.column && a.row == b.row - 1;
+	public static BiPredicate<Field, Field> bottom = (a, b) -> a.column == b.column && a.row == b.row - 1;
 	// bottomRight
-	public static BiPredicate<Figure, Figure> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
+	public static BiPredicate<Field, Field> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
+
+	/**
+	 * checks whether unit of Field xy is in danger
+	 */
+
+	/*
+	 * @TODO
+	 * 
+	 */
+	/**
+	 * @TODO
+	 * @param posFields
+	 *            InputList that will be checked for possibilities of retreat
+	 * @param requestingPlayer
+	 * @return
+	 */
 
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
-		List<String> tempList2 = posFields.subList(0, 4);
-		List<Figure> tempList = storage.stream().filter(a -> tempList2.contains(a.getPostion()))
+		List<String> tempList2 = posFields.subList(0, 7);
+		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
 				.collect(Collectors.toList());
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
-	public List<String> retreat(List<String> posFields, String requestingPlayer, String move) {
+	public List <String> retreat(List<String> posFields) {
 
-		List<String> tempList = posFields.subList(5, 10);
-
-		List<Figure> tempList2 = storage.stream().filter(a -> tempList.contains(a.getPostion()))
+		List<String> tempList = posFields.subList(5, 11);
+		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
 				.collect(Collectors.toList());
-		//List<Figure> emptyList = tempList2.stream().filter(a -> a.isEmpty()).collect(Collectors.toList());
-		
-		List<String>posRetreat = null;
-		
+
+		List<String> posRetreat = null;
+
 		if (tempList2.get(0).isEmpty() && tempList.get(3).isEmpty()) {
-			posRetreat.add(tempList2.get(0).getPostion());
 			posRetreat.add(tempList2.get(3).getPostion());
 		}
-		if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
-			posRetreat.add(tempList2.get(1).getPostion());
+		else if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
 			posRetreat.add(tempList2.get(4).getPostion());
 		}
-		if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
-			posRetreat.add(tempList2.get(2).getPostion());
+		else if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
 			posRetreat.add(tempList2.get(5).getPostion());
+		} else {
+			posRetreat.add("NO RETREAT");
 		}
 		return posRetreat;
-		
-		// tempList2.stream().filter(a -> tempList.get(0).isEmpty()).).
-		// tempList2.stream().filter(a ->
-		// a.getPostion(tempList2.get(0).isEmpty())).collect(Collectors.toList());
-		// tempList2.stream().filter(a -> (a.getPostion().equals(tempList.get(0))&&
-		// a.getPostion().equals(tempList.get(3)) && a.isEmpty()) ||
-		// a.getPostion().equals(tempList))).collect(Collectors.toList());
-
-		// return emptyList.stream().filter(a ->
-		// emptyList.contains((a.getPostion().equals(tempList[0]) &&
-		// a.getPostion().equals(tempList[3])))).map(a ->
-		// a.getPostion().collect(Collectors.toList()));
-
-		// char column = moveBeginning.charAt(0);
-		// int row = (int) moveBeginning.charAt(1);
-		// Figure f = new Figure(requestingPlayer, column, row);
-		//
-		// if (requestingPlayer.equalsIgnoreCase("b")) {
-		// return storage.stream().anyMatch(a -> top.test(a, f) || topRight.test(a, f)
-		// || topLeft.test(a, f)
-		// || left.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer) ==
-		// false);
-		// } else {
-		// return storage.stream().anyMatch(a -> left.test(a, f) || bottomLeft.test(a,
-		// f) || bottom.test(a, f)
-		// || bottomRight.test(a, f) || right.test(a, f) && a.isPlayer(requestingPlayer)
-		// == false);
 	}
 
-	// �berpr�fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner etc
+	// �berpr�fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
+	// etc
 	// auf toMove
-	public boolean isCannonAndCanFire(String fromMove, String toMove, String requestingPlayer) {
-		List l = storage.findWay(fromMove, toMove);
-		List<String> l2 = storage.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Figure::getPostion)
+
+	/**
+	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist
+	 * �berpr�fung auch direkt durch move ohne findway, also to Move is teil von
+	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
+	 * 
+	 */
+
+	/**
+	 * Useless since CannonAction
+	 */
+	// public boolean isCannonAndCanFire(String fromMove, String toMove, String
+	// requestingPlayer) {
+	// List l = fieldList.findWay(fromMove, toMove);
+	// List<String> l2 = fieldList.stream().filter(a ->
+	// a.isPlayer(requestingPlayer)).map(Field::getPostion)
+	// .collect(Collectors.toList());
+	//
+	// boolean free = fieldList.stream().anyMatch((a ->
+	// a.getPostion().equals(l.get(3)) && a.isEmpty()));
+	// // l.sublist to check whether it is a cannon
+	// return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
+
+	// }
+	/**
+	 * @TODO check type safety for findway!!!
+	 * 
+	 * 
+	 * @param fromMove
+	 * @param toMove
+	 * @param requestingPlayer
+	 * @return
+	 */
+	public List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
+		List<String> moves = fieldList.findWay(fromMove, toMove);
+		List<String> possibleMoves = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
 				.collect(Collectors.toList());
-		boolean free = storage.stream().anyMatch((a -> a.getPostion().equals(l.get(3)) && a.isEmpty()));
-		// l.sublist to check whether it is a cannon
-		return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
+
+		if (possibleMoves.containsAll(moves.subList(0, 3))
+				&& fieldList.stream().anyMatch(f -> f.getPostion().equals(moves.get(3)) && f.isEmpty()))
+			return moves;
+		else
+			return Arrays.asList("FAILED!");
 
 	}
 
-	// @TODO Verschiebung mittels swap
-	// kann auch eine Liste von Figuren wiedergeben, die Verschoben werden m�ssen
-	public boolean isCannonAndCanMove(String fromMove, String toMove, String requestingPlayer) {
-		List moves = storage.findWay(fromMove, toMove);
-		List<String> possibleMoves = storage.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Figure::getPostion)
-				.collect(Collectors.toList());
+	/**
+	 * checks whether field is part of a canon if head is free and it's a move turn
+	 * it swaps fields if head is free and it's a fire turn it destroys the field it
+	 * fires at
+	 * 
+	 * 
+	 * @param fromMove
+	 * @param toMove
+	 * @param requestingPlayer
+	 */
+	public boolean cannonAction(String fromMove, String toMove, String requestingPlayer) {
+		List<String> moves = isCannon(fromMove, toMove, requestingPlayer);
 		if (moves.size() == 4) {
-			if (possibleMoves.contains(moves.subList(0, 3))
-					&& storage.stream().anyMatch(a -> a.getPostion().equals(moves.get(4)) && a.isEmpty()))
-				;
-			// Es handelt sich um eine Verschiebung nun muss nurnoch Verschoben werden
+			swap(moves.get(0), moves.get(1));
+			return true;
+		} else if (moves.size() > 4 && moves.size() < 7) {
+			destroy(moves.get(moves.size() - 1));
+			return true;
 		}
 		return false;
-	}
 
-	// @Todo Methode swap muss implementiert werden und inhalt der Figurenfelder
-	// Swappen
+	}
 
 	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
 
@@ -126,7 +152,8 @@ public class Board {
 		char toRow = to.charAt(1);
 
 		if ((((Math.abs(fromCol - toCol)) <= 1) && ((toCol - fromCol) <= 1))) {
-			return storage.stream().anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer));
+			return fieldList.stream()
+					.anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer));
 		}
 		return false;
 	}
@@ -140,7 +167,7 @@ public class Board {
 		char toRow = to.charAt(1);
 
 		if (fromRow == toRow && toCol == fromCol - 1 || fromCol + 1 == toCol) {
-			return storage.stream()
+			return fieldList.stream()
 					.anyMatch(a -> a.column == toCol && a.row == toRow && a.isPlayer(requestingPlayer) == false);
 		}
 		return false;
@@ -148,8 +175,8 @@ public class Board {
 
 	public static String getBoard() {
 		String s = "";
-		for (int i = 0; i < storage.size(); i++) {
-			s += storage.remove(i).toString();
+		for (int i = 0; i < fieldList.size(); i++) {
+			s += fieldList.remove(i).toString();
 			if (i % 10 == 0)
 				s += "//";
 		}
@@ -157,8 +184,8 @@ public class Board {
 	}
 
 	public static void swap(String fromM, String toM) {
-		Figure first = storage.stream().filter(a -> a.getPostion().equals(fromM)).findFirst().get();
-		Figure last = storage.stream().filter(a -> a.getPostion().equals(toM)).findFirst().get();
+		Field first = fieldList.stream().filter(a -> a.getPostion().equals(fromM)).findFirst().get();
+		Field last = fieldList.stream().filter(a -> a.getPostion().equals(toM)).findFirst().get();
 
 		String tempColor = first.getColor();
 		first.setColor(last.getColor());
@@ -166,101 +193,27 @@ public class Board {
 	}
 
 	public static void destroy(String destination) {
-		storage.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().setColor("1");
+		fieldList.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().destroy();
 	}
 
 	/**
 	 * 
 	 * @TODO
 	 *
-	 * 		finde ein Element, was vor sich frei hat, zum Spieler geh�rt und nicht
-	 *       eine Burg ist
+	 * 		finde ein Element, was vor sich frei hat, zum Spieler geh�rt und
+	 *       nicht eine Burg ist
 	 */
 
-	public List<Figure> playableFigure(String requestingPlayer) {
-
-		List<Figure> lplay = null;
-		List<Figure> l = storage.stream().filter(a -> a.isSolider()).collect(Collectors.toList());
-		List<Figure> lplayw = null;
-		List<Figure> lplayb = null;
-
-		for (Figure help : l) {
-			if (help.isPlayer(requestingPlayer)) {
-				lplayw = (l.stream()
-						.filter(a -> ((inDanger(help.getPostion(), help.getColor())
-								&& (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
-										|| !right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
-										|| !bottomLeft.test(a, help) || !bottomRight.test(a, help))))
-								|| ((!inDanger(help.getPostion(), help.getColor())
-										&& (!right.test(a, help) || !left.test(a, help) || !bottom.test(a, help)
-												|| !bottomLeft.test(a, help) || !bottomRight.test(a, help)))))
-						.collect(Collectors.toList()));
-			} else {
-				lplayb = (l.stream()
-						.filter(a -> ((inDanger(help.getPostion(), help.getColor())
-								&& (!top.test(a, help)
-										|| !topLeft.test(a, help) || !topRight.test(a, help) || !right.test(a, help)
-										|| !left.test(a, help) || !bottom.test(a, help) || !bottomLeft.test(a, help)
-										|| !bottomRight.test(a, help)))
-								|| ((!inDanger(help.getPostion(), help.getColor())
-										&& (!top.test(a, help) || !topLeft.test(a, help) || !topRight.test(a, help)
-												|| !right.test(a, help) || !left.test(a, help))))))
-						.collect(Collectors.toList()));
-			}
-			lplay.addAll(lplayw);
-			lplay.addAll(lplayb);
-		}
-		return lplay;
-
-		// for (Figure h : l) {
-		// if (h.color.equals("w")) {
-		// if (inDanger(h.postion, h.color)) {
-		// if (l.stream()
-		// .filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
-		// || !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
-		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
-		// lplay.add(h);
-		// }
-		// } else {
-		// if (l.stream().filter(a -> !right.test(a, h) || !left.test(a, h) ||
-		// !bottom.test(a, h)
-		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h)) != null) {
-		// lplay.add(h);
-		// }
-		// }
-		// } else {
-		// if (inDanger(h.postion, h.color)) {
-		// if (l.stream()
-		// .filter(a -> (!top.test(a, h) || !topLeft.test(a, h) || !topRight.test(a, h)
-		// || !right.test(a, h) || !left.test(a, h) || !bottom.test(a, h)
-		// || !bottomLeft.test(a, h) || !bottomRight.test(a, h))) != null) {
-		// lplay.add(h);
-		// }
-		// } else {
-		// if (l.stream().filter(a -> (!top.test(a, h) || !topLeft.test(a, h) ||
-		// !topRight.test(a, h)
-		// || !right.test(a, h) || !left.test(a, h))) != null) {
-		// lplay.add(h);
-		// }
-		// }
-		//
-		// }
-		// }
-		// return lplay;
-		//
-		// // 1. Suche Elemente mit color != 1 & !=isCastle() add to List
-		// // 2. Nehme mit schleife jedes Element und check predicate
-		// // 3. sofern min. 1 freies feld und/oder inDanger= true adde to list
-		// // return new List mit benutzbaren Elementen
+	public boolean canStillPlay(List <String> posFields, String requestingPlayer) {
+		return posFields.contains((inDanger(posFields, requestingPlayer)) && !retreat(posFields).contains("NO RETREAT") || normalMove() || canHit()));
 	}
 
-	public boolean canStillPlay(List<Figure> lplay, String requestingPlayer) {
-		if (lplay.contains(requestingPlayer)) {
-			return true;
-		} else {
-			return false;
-		}
 
+
+
+	public List<Field> fieldsFromPositions(List<String> positions) {
+		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
 	}
+
 
 }

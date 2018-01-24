@@ -9,37 +9,6 @@ public class Board {
 
 	public static FieldHandler fieldList = null;
 
-<<<<<<< HEAD
-	// topLeft
-
-	public static BiPredicate<Field, Field> topLeft = (a, b) -> a.column == b.column && a.row == b.row + 1;
-	// top
-	public static BiPredicate<Field, Field> top = (a, b) -> a.column == b.column && a.row == b.row + 1;
-	// topRight
-	public static BiPredicate<Field, Field> topRight = (a, b) -> a.column == b.column + 1 && a.row == b.row + 1;
-	// left
-	public static BiPredicate<Field, Field> left = (a, b) -> a.column == b.column - 1 && a.row == b.row;
-	// right
-	public static BiPredicate<Field, Field> right = (a, b) -> a.column == b.column + 1 && a.row == b.row;
-	// bottomLeft
-	public static BiPredicate<Field, Field> bottomLeft = (a, b) -> a.column == b.column - 1 && a.row == b.row - 1;
-	// bottom
-	public static BiPredicate<Field, Field> bottom = (a, b) -> a.column == b.column && a.row == b.row - 1;
-	// bottomRight
-	public static BiPredicate<Field, Field> bottomRight = (a, b) -> a.column == b.column + 1 && a.row == b.row - 1;
-
-	/**
-	 * checks whether unit of Field xy is in danger
-	 */
-
-	/*
-	 * @TODO
-	 * 
-	 */
-=======
-
-	 
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 	/**
 	 * @TODO
 	 * @param posFields
@@ -49,23 +18,17 @@ public class Board {
 	 */
 
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-		List<String> tempList2 = posFields.subList(0, 7);
-=======
-		List<String> tempList2 = posFields.subList(0, 9);
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
-=======
+
+
 		List<String> tempList2 = posFields.subList(0, 8);
->>>>>>> NW
 		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
 				.collect(Collectors.toList());
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
-<<<<<<< HEAD
-	public List <String> retreat(List<String> posFields) {
-=======
+
+
+
 	/**
 	 * 
 	 * @param posFields
@@ -74,8 +37,8 @@ public class Board {
 	 */
 	public List<String> retreatFields(List<String> posFields) {
 
-		List<String> tempList = posFields.subList(5, 10);
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+	
+
 
 		List<String> tempList = posFields.subList(5, 11);
 		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
@@ -95,10 +58,7 @@ public class Board {
 			posRetreat.add("NO RETREAT");
 		}
 		return posRetreat;
-<<<<<<< HEAD
-=======
 
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
 	}
 public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 	return possibleRetreatFields.contains(to);
@@ -106,7 +66,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 
 
 
-<<<<<<< HEAD
+
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
 	// etc
 	// auf toMove
@@ -126,7 +86,6 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 	 * @param requestingPlayer
 	 * @return
 	 */
-<<<<<<< HEAD
 
 	/**
 	 * Useless since CannonAction
@@ -153,8 +112,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 	 * @param requestingPlayer
 	 * @return
 	 */
-=======
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+
 	public List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
 		List<String> moves = fieldList.findWay(fromMove, toMove);
 		List<String> possibleMoves = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
@@ -193,25 +151,27 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 
 	}
 
-<<<<<<< HEAD
-	public boolean normalMoveBlack(String from, String to, String requestingPlayer) {
-=======
+
+	
 	/**
 	
 	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
 	 * isPlayer hat 3-Seitige Logik-> wenn wir Gegnerischen spieler und nicht frei haben wollen müssen wir nicht player und isEmpty nehmen.
 	 */
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+
 
 	public boolean normalMoveCheck(String to, String requestingPlayer, List<String> surroundingFields) {
 		return (surroundingFields.subList(0, 3).contains(to) && fieldList.stream()
 				.filter(f -> !f.isPlayer(requestingPlayer)).map(f -> f.getPostion()).anyMatch(f -> f.equals(to)));
 
 	}
+	/**
+	 * TODO
+	 */
 	//Ist der eine Teil
 	public boolean normalMove (String requestingPlayer, List<String> surroundingFields) {
 	List<String> enemy=	fieldList.stream().filter(a->a.isPlayer(requestingPlayer)).map(Field::getPostion).collect(Collectors.toList());
-		
+		return false;
 	}
 
 /**
@@ -252,7 +212,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 		fieldList.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().destroy();
 	}
 
-<<<<<<< HEAD
+
 	/**
 	 * 
 	 * @TODO
@@ -273,7 +233,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 	}
 
 
-=======
+
 	public void move(String from, String to) {
 		String first = fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().getColor();
 		fieldList.stream().filter(f -> f.getPostion().equals(to)).findFirst().get().setColor(first);
@@ -285,9 +245,7 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 		return fieldList.stream().anyMatch(f->f.getPostion().equals(position)&&!f.isPlayer(requestingPlayer)&&!f.isEmpty());
 	}
 
-	public List<Field> fieldsFromPositions(List<String> positions) {
-		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
-	}
 
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+
+
 }

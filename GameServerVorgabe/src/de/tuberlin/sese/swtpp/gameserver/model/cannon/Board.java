@@ -1,5 +1,6 @@
 package de.tuberlin.sese.swtpp.gameserver.model.cannon;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,15 +20,11 @@ public class Board {
 
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
 
-
 		List<String> tempList2 = posFields.subList(0, 8);
 		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
 				.collect(Collectors.toList());
 		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
-
-
-
 
 	/**
 	 * 
@@ -37,22 +34,17 @@ public class Board {
 	 */
 	public List<String> retreatFields(List<String> posFields) {
 
-	
-
-
 		List<String> tempList = posFields.subList(5, 11);
 		List<Field> tempList2 = fieldList.stream().filter(a -> tempList.contains(a.getPostion()))
 				.collect(Collectors.toList());
 
-		List<String> posRetreat = null;
+		List<String> posRetreat = new ArrayList<String>();
 
 		if (tempList2.get(0).isEmpty() && tempList.get(3).isEmpty()) {
 			posRetreat.add(tempList2.get(3).getPostion());
-		}
-		else if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
+		} else if (tempList2.get(1).isEmpty() && tempList.get(4).isEmpty()) {
 			posRetreat.add(tempList2.get(4).getPostion());
-		}
-		else if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
+		} else if (tempList2.get(2).isEmpty() && tempList.get(5).isEmpty()) {
 			posRetreat.add(tempList2.get(5).getPostion());
 		} else {
 			posRetreat.add("NO RETREAT");
@@ -60,50 +52,21 @@ public class Board {
 		return posRetreat;
 
 	}
-public boolean checkRetreat(String to, List<String> possibleRetreatFields){
-	return possibleRetreatFields.contains(to);
-}
 
-
-
+	public boolean checkRetreat(String to, List<String> possibleRetreatFields) {
+		return possibleRetreatFields.contains(to);
+	}
 
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
 	// etc
 	// auf toMove
 
 	/**
-	 * Bei normal Move checken ob findway teilleiste von den ersten 3 von MARK ist
+	 * Bei normal Move checken ob findway teilliste von den ersten 3 von MARK ist
 	 * ï¿½berprï¿½fung auch direkt durch move ohne findway, also to Move is teil von
 	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
-=======
-	/**
-	 * @TODO check type safety for findway!!!
->>>>>>> b7bfba16bcb42f4c8ea4505193914f1f1a215db7
+	 * /**
 	 * 
-	 * 
-	 * @param fromMove
-	 * @param toMove
-	 * @param requestingPlayer
-	 * @return
-	 */
-
-	/**
-	 * Useless since CannonAction
-	 */
-	// public boolean isCannonAndCanFire(String fromMove, String toMove, String
-	// requestingPlayer) {
-	// List l = fieldList.findWay(fromMove, toMove);
-	// List<String> l2 = fieldList.stream().filter(a ->
-	// a.isPlayer(requestingPlayer)).map(Field::getPostion)
-	// .collect(Collectors.toList());
-	//
-	// boolean free = fieldList.stream().anyMatch((a ->
-	// a.getPostion().equals(l.get(3)) && a.isEmpty()));
-	// // l.sublist to check whether it is a cannon
-	// return l2.containsAll(l.subList(0, 2)) && l.contains(toMove) && free;
-
-	// }
-	/**
 	 * @TODO check type safety for findway!!!
 	 * 
 	 * 
@@ -143,7 +106,8 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 		if (moves.size() == 4) {
 			swap(moves.get(0), moves.get(1));
 			return true;
-		} else if (moves.size() > 4 && moves.size() < 7 &&enemyAtPosition(moves.get(moves.size()-1),requestingPlayer)) {
+		} else if (moves.size() > 4 && moves.size() < 7
+				&& enemyAtPosition(moves.get(moves.size() - 1), requestingPlayer)) {
 			destroy(moves.get(moves.size() - 1));
 			return true;
 		}
@@ -151,43 +115,45 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 
 	}
 
-
-	
 	/**
-	
+	 * 
 	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
-	 * isPlayer hat 3-Seitige Logik-> wenn wir Gegnerischen spieler und nicht frei haben wollen müssen wir nicht player und isEmpty nehmen.
+	 * isPlayer hat 3-Seitige Logik-> wenn wir Gegnerischen spieler und nicht frei
+	 * haben wollen müssen wir nicht player und isEmpty nehmen.
 	 */
-
 
 	public boolean normalMoveCheck(String to, String requestingPlayer, List<String> surroundingFields) {
 		return (surroundingFields.subList(0, 3).contains(to) && fieldList.stream()
 				.filter(f -> !f.isPlayer(requestingPlayer)).map(f -> f.getPostion()).anyMatch(f -> f.equals(to)));
 
 	}
+
 	/**
 	 * TODO
 	 */
-	//Ist der eine Teil
-	public boolean normalMove (String requestingPlayer, List<String> surroundingFields) {
-	List<String> enemy=	fieldList.stream().filter(a->a.isPlayer(requestingPlayer)).map(Field::getPostion).collect(Collectors.toList());
-		return false;
+	// Ist der eine Teil
+	public boolean normalMove(String requestingPlayer, List<String> surroundingFields) {
+		return fieldList.stream().anyMatch(
+				a -> !a.isPlayer(requestingPlayer) && surroundingFields.subList(0, 3).contains(a.getPostion()));
+
 	}
 
-/**
- * 	
- * @param to Destination of move
- * @param requestingPlayer player whose turn it is
- * @param surroundingFields neighbor fields found by algorithm
- * @return true if field from has neighbors and could move there
- */
-	public boolean hasNeighbor(String to, String requestingPlayer, List<String> surroundingFields) { 
+	/**
+	 * 
+	 * @param to
+	 *            Destination of move
+	 * @param requestingPlayer
+	 *            player whose turn it is
+	 * @param surroundingFields
+	 *            neighbor fields found by algorithm
+	 * @return true if field from has neighbors and could move there
+	 */
+	public boolean hasNeighbor(String to, String requestingPlayer, List<String> surroundingFields) {
 		List<String> neighbor = surroundingFields.subList(3, 5);
-		return (neighbor.contains(to) && fieldList.stream().anyMatch(f -> f.getPostion().equals(to)&& !f.isPlayer(requestingPlayer)&&!f.isEmpty()));
+		return (neighbor.contains(to) && fieldList.stream()
+				.anyMatch(f -> f.getPostion().equals(to) && !f.isPlayer(requestingPlayer) && !f.isEmpty()));
 
 	}
-	
-	
 
 	public static String getBoard() {
 		String s = "";
@@ -212,27 +178,31 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 		fieldList.stream().filter(a -> a.getPostion().equals(destination)).findFirst().get().destroy();
 	}
 
-
 	/**
 	 * 
-	 * @TODO
-	 *
+	 * @TODO !!!!!!!!!!!!!!!!!!!!!!!
+	 * 
+	 * algorithmus muss in anyMatch Stream geschehen und für jedes Element, was zum spieler gehört anwenden
+	 * 
+	 * 1. Liste mit Feldern die nur vom Spieler bestzt sind
+	 * 2. auf diese Liste anymatch
+	 * 
+	 * 
 	 * 		finde ein Element, was vor sich frei hat, zum Spieler gehï¿½rt und
 	 *       nicht eine Burg ist
 	 */
 
-	public boolean canStillPlay(List <String> posFields, String requestingPlayer) {
+	public boolean canStillPlay(String requestingPlayer) {
+		List<String> posfields = algorithmus
 		return posFields.contains((inDanger(posFields, requestingPlayer)) && !retreat(posFields).contains("NO RETREAT") || normalMove() || hasNeighbor()));
 	}
 
-
-
-
+	
+	
+	
 	public List<Field> fieldsFromPositions(List<String> positions) {
 		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
 	}
-
-
 
 	public void move(String from, String to) {
 		String first = fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().getColor();
@@ -240,12 +210,10 @@ public boolean checkRetreat(String to, List<String> possibleRetreatFields){
 		fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().destroy();
 
 	}
-	
+
 	public boolean enemyAtPosition(String position, String requestingPlayer) {
-		return fieldList.stream().anyMatch(f->f.getPostion().equals(position)&&!f.isPlayer(requestingPlayer)&&!f.isEmpty());
+		return fieldList.stream()
+				.anyMatch(f -> f.getPostion().equals(position) && !f.isPlayer(requestingPlayer) && !f.isEmpty());
 	}
-
-
-
 
 }

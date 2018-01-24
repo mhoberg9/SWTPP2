@@ -53,8 +53,9 @@ public class Board {
 
 	}
 
-	public boolean checkRetreat(String to, List<String> possibleRetreatFields) {
-		return possibleRetreatFields.contains(to);
+	public boolean checkRetreat(String to, List<String> possibleRetreatFields, String requestingPlayer) {
+
+		return possibleRetreatFields.contains(to) && inDanger(possibleRetreatFields, requestingPlayer);
 	}
 
 	// ï¿½berprï¿½fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
@@ -122,7 +123,7 @@ public class Board {
 	 * haben wollen mï¿½ssen wir nicht player und isEmpty nehmen.
 	 */
 
-	public boolean normalMoveCheck(String to, String requestingPlayer, List<String> surroundingFields) {
+	public boolean normalMoveCheck(String to, List<String> surroundingFields, String requestingPlayer) {
 		return (surroundingFields.subList(0, 3).contains(to) && fieldList.stream()
 				.filter(f -> !f.isPlayer(requestingPlayer)).map(f -> f.getPostion()).anyMatch(f -> f.equals(to)));
 
@@ -192,17 +193,8 @@ public class Board {
 
 	/**
 	 * 
-	 * @TODO !!!!!!!!!!!!!!!!!!!!!!!
-	 * 
-	 *       algorithmus muss in anyMatch Stream geschehen und fï¿½r jedes Element,
-	 *       was zum spieler gehï¿½rt anwenden
-	 * 
-	 *       1. Liste mit Feldern die nur vom Spieler bestzt sind 2. auf diese Liste
-	 *       anymatch
-	 * 
-	 * 
-	 *       finde ein Element, was vor sich frei hat, zum Spieler gehï¿½rt und nicht
-	 *       eine Burg ist
+	 * @TODO !!!!!!!!!!!!!!!!!!!!!!! finde ein Element, was vor sich frei hat, zum
+	 *       Spieler gehört und nicht eine Burg ist
 	 */
 
 	public boolean canStillPlay(String requestingPlayer) {
@@ -213,6 +205,29 @@ public class Board {
 				return true;
 			return false;
 		});
+<<<<<<< HEAD
+=======
+	}
+
+	public boolean performMove(String move, String requestingPlayer) {
+		String from = move.split("-")[0];
+		String to = move.split("-")[1];
+		List<String> possibleFields = FieldHandler.mark(to, requestingPlayer);
+		boolean fromIsOk = fieldList.stream()
+				.anyMatch(f -> f.isPlayer(requestingPlayer) && f.getPostion().equals(from));
+		boolean toIsOk = fieldList.stream().anyMatch(f -> !f.isPlayer(requestingPlayer) && f.getPostion().equals(to));
+		if (fromIsOk && toIsOk) {
+			if (cannonAction(from, to, requestingPlayer)) {
+				return true;
+			} else if (checkRetreat(to, possibleFields, requestingPlayer)
+					|| normalMoveCheck(to, possibleFields, requestingPlayer)
+					|| hasNeighbor(to, requestingPlayer, possibleFields)) {
+				move(from, to);
+				return true;}
+		}
+	return canStillPlay(requestingPlayer);
+
+>>>>>>> 8844ba55e6b9f57f199a6dcb7d18cb3bc313a882
 	}
 
 	public List<Field> fieldsFromPositions(List<String> positions) {

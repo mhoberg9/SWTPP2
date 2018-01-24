@@ -17,7 +17,7 @@ public class Board {
 	 * @param requestingPlayer
 	 * @return
 	 */
-
+//skaer skar
 	public boolean inDanger(List<String> posFields, String requestingPlayer) {
 
 		List<String> tempList2 = posFields.subList(0, 8);

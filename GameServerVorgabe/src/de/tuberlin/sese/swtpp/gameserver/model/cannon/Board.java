@@ -17,8 +17,8 @@ public class Board {
 	 * @param requestingPlayer
 	 * @return
 	 */
-//skaer skar
-	public boolean inDanger(List<String> posFields, String requestingPlayer) {
+	// skaer skar
+	public static boolean inDanger(List<String> posFields, String requestingPlayer) {
 
 		List<String> tempList2 = posFields.subList(0, 8);
 		List<Field> tempList = fieldList.stream().filter(a -> tempList2.contains(a.getPostion()))
@@ -53,8 +53,8 @@ public class Board {
 
 	}
 
-	public boolean checkRetreat(String to, List<String> possibleRetreatFields) {
-		return possibleRetreatFields.contains(to);
+	public static boolean checkRetreat(String to, List<String> possibleRetreatFields, String requestingPlayer) {
+		return possibleRetreatFields.contains(to) && inDanger(possibleRetreatFields, requestingPlayer);
 	}
 
 	// �berpr�fung sieht immer wie folgt aus eigener Stein auf fromMove Gegner
@@ -76,7 +76,7 @@ public class Board {
 	 * @return
 	 */
 
-	public List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
+	public static List<String> isCannon(String fromMove, String toMove, String requestingPlayer) {
 		List<String> moves = fieldList.findWay(fromMove, toMove);
 		List<String> possibleMoves = fieldList.stream().filter(a -> a.isPlayer(requestingPlayer)).map(Field::getPostion)
 				.collect(Collectors.toList());
@@ -101,7 +101,7 @@ public class Board {
 	 * @param toMove
 	 * @param requestingPlayer
 	 */
-	public boolean cannonAction(String fromMove, String toMove, String requestingPlayer) {
+	public static boolean cannonAction(String fromMove, String toMove, String requestingPlayer) {
 		List<String> moves = isCannon(fromMove, toMove, requestingPlayer);
 		if (moves.size() == 4) {
 			swap(moves.get(0), moves.get(1));
@@ -122,7 +122,7 @@ public class Board {
 	 * haben wollen m�ssen wir nicht player und isEmpty nehmen.
 	 */
 
-	public boolean normalMoveCheck(String to, String requestingPlayer, List<String> surroundingFields) {
+	public static boolean normalMoveCheck(String to, List<String> surroundingFields, String requestingPlayer) {
 		return (surroundingFields.subList(0, 3).contains(to) && fieldList.stream()
 				.filter(f -> !f.isPlayer(requestingPlayer)).map(f -> f.getPostion()).anyMatch(f -> f.equals(to)));
 
@@ -148,8 +148,8 @@ public class Board {
 	 *            neighbor fields found by algorithm
 	 * @return true if field from has neighbors and could move there
 	 */
-	public boolean hasNeighborCheck(String to, List<String> surroundingFields) {
-		return surroundingFields.contains(to);
+	public static boolean hasNeighborCheck(String to, List<String> surroundingFields, String requestingPlayer) {
+		return hasNeighbor(surroundingFields, requestingPlayer).contains(to);
 	}
 
 	/**
@@ -158,17 +158,16 @@ public class Board {
 	 * @param requestingPlayer
 	 * @return
 	 */
-	public List<String> hasNeighbor(List<String> surroundingFields, String requestingPlayer) {
+	public static List<String> hasNeighbor(List<String> surroundingFields, String requestingPlayer) {
 		List<String> neighbor = surroundingFields.subList(3, 5);
-		if (fieldList.stream()
-				.anyMatch(a -> neighbor.contains(a.getPostion()) && neighbor.contains(!a.isPlayer(requestingPlayer)))) {
+		if (fieldList.stream().anyMatch(a -> neighbor.contains(a.getPostion())
+				&& neighbor.contains(!a.isPlayer(requestingPlayer) && !a.isEmpty()))) {
 			return fieldList.stream()
-					.filter(a -> neighbor.contains(a.getPostion()) && neighbor.contains(!a.isPlayer(requestingPlayer)))
+					.filter(a -> neighbor.contains(a.getPostion())
+							&& neighbor.contains(!a.isPlayer(requestingPlayer) && !a.isEmpty()))
 					.map(a -> a.getPostion()).collect(Collectors.toList());
 		} else {
-			List<String> noNeighbor = new ArrayList<>();
-			noNeighbor.add("NO NEIGHBOR");
-			return noNeighbor;
+			return Arrays.asList("NO NEIGHBOR");
 		}
 
 	}
@@ -207,8 +206,8 @@ public class Board {
 	 *       anymatch
 	 * 
 	 * 
-	 *       finde ein Element, was vor sich frei hat, zum Spieler geh�rt und nicht
-	 *       eine Burg ist
+	 *       finde ein Element, was vor sich frei hat, zum Spieler geh�rt und
+	 *       nicht eine Burg ist
 	 */
 
 	public boolean canStillPlay(String requestingPlayer) {
@@ -226,14 +225,34 @@ public class Board {
 		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
 	}
 
-	public void move(String from, String to) {
+	public static void move(String from, String to) {
 		String first = fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().getColor();
 		fieldList.stream().filter(f -> f.getPostion().equals(to)).findFirst().get().setColor(first);
 		fieldList.stream().filter(f -> f.getPostion().equals(from)).findFirst().get().destroy();
 
 	}
 
-	public boolean enemyAtPosition(String position, String requestingPlayer) {
+	public static boolean performMove(String move, String requestingPlayer) {
+		String from = move.split("-")[0];
+		String to = move.split("-")[1];
+		List<String> possibleFields = FieldHandler.mark(to, requestingPlayer);
+		boolean fromIsOk = fieldList.stream()
+				.anyMatch(f -> f.isPlayer(requestingPlayer) && f.getPostion().equals(from));
+		boolean toIsOk = fieldList.stream().anyMatch(f -> !f.isPlayer(requestingPlayer) && f.getPostion().equals(to));
+		if (fromIsOk && toIsOk) {
+			if (cannonAction(from, to, requestingPlayer)) {
+				return true;
+			} else if (checkRetreat(to, possibleFields, requestingPlayer)
+					|| normalMoveCheck(to, possibleFields, requestingPlayer)
+					|| hasNeighborCheck(to, possibleFields, requestingPlayer)) {
+				move(from, to);
+				return true;
+			}
+		}
+return false;
+	}
+
+	public static boolean enemyAtPosition(String position, String requestingPlayer) {
 		return fieldList.stream()
 				.anyMatch(f -> f.getPostion().equals(position) && !f.isPlayer(requestingPlayer) && !f.isEmpty());
 	}

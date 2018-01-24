@@ -239,26 +239,47 @@ public class CannonGame extends Game implements Serializable {
 		return Board.getBoard();
 
 	}
-
+/**
+ * TODO finish Methode
+ * Player can player perform another Move
+ */
 	@Override
 	public boolean tryMove(String moveString, Player player) {
+		String playerString;
+		Player nextPlayer;
+		if(player.equals(whitePlayer)) {playerString="w";
+		nextPlayer=blackPlayer;}
+		else {playerString="b";
+		nextPlayer=blackPlayer;
+		}
+		if(Board.performMove(moveString, playerString)) {
+		setNextPlayer(nextPlayer);
+	return true;
+	}
+		
 
 		return false;
 	}
 
 	public String equalizeNotation(String s) {
+		s=s.replaceAll(" ", null);
+		if(s.endsWith("w")) {
+		s=s.substring(0,(s.length()-2));
+		}
+			
+		
 		if (s.startsWith("//"))
 			s = s.replaceFirst("//", "9/");
 		if (s.endsWith("//"))
 			s = s.substring(0, s.length() - 2) + "//9";
-		s.replaceAll("2", "11");
-		s.replaceAll("3", "111");
-		s.replaceAll("4", "1111");
-		s.replaceAll("5", "11111");
-		s.replaceAll("6", "111111");
-		s.replaceAll("7", "1111111");
-		s.replaceAll("8", "11111111");
-		s.replaceAll("9", "111111111");
+		s=s.replaceAll("2", "11");
+		s=s.replaceAll("3", "111");
+		s=s.replaceAll("4", "1111");
+		s=s.replaceAll("5", "11111");
+		s=s.replaceAll("6", "111111");
+		s=s.replaceAll("7", "1111111");
+		s=s.replaceAll("8", "11111111");
+		s=s.replaceAll("9", "111111111");
 		return s;
 	}
 

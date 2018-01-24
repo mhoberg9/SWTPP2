@@ -148,13 +148,25 @@ public class Board {
 	 *            neighbor fields found by algorithm
 	 * @return true if field from has neighbors and could move there
 	 */
-	public boolean hasNeighbor(String to, String requestingPlayer, List<String> surroundingFields) {
-		List<String> neighbor = surroundingFields.subList(3, 5);
-		return (neighbor.contains(to) && fieldList.stream()
-				.anyMatch(f -> f.getPostion().equals(to) && !f.isPlayer(requestingPlayer) && !f.isEmpty()));
-
+	public boolean hasNeighborCheck(String to,List<String> surroundingFields) {
+		//List<String> neighbor = surroundingFields.subList(3, 5);
+		return surroundingFields.contains(to);
+						//&& !f.isPlayer(requestingPlayer) && !f.isEmpty()));
+	}
+	
+	/**
+	 * 
+	 * @param surroundingFields
+	 * @param requestingPlayer
+	 * @return
+	 */
+	public List <String> hasNeighbor(List <String> surroundingFields, String requestingPlayer) {
+		List <String> neighbor = surroundingFields.subList(3, 5);
+		List<Field> tempList = fieldList.stream().filter(a -> neighbor.contains(a.getPostion()) && neighbor.contains(!a.isPlayer(requestingPlayer)).collect(Collectors.toList());
+		return tempList.stream().anyMatch(a -> !a.isPlayer(requestingPlayer));
 	}
 
+	
 	public static String getBoard() {
 		String s = "";
 		for (int i = 0; i < fieldList.size(); i++) {
@@ -194,7 +206,6 @@ public class Board {
 	 */
 
 	public boolean canStillPlay(String requestingPlayer) {
-
 		return fieldList.stream().anyMatch(a -> {
 			List<String> posFields = FieldHandler.mark(a.getPostion(), requestingPlayer);
 			if (inDanger(posFields, requestingPlayer) && !retreatFields(posFields).contains("NO RETREAT")
@@ -202,9 +213,6 @@ public class Board {
 				return true;
 			return false;
 		});
-		// return posFields.contains((inDanger(posFields, requestingPlayer)) &&
-		// !retreat(posFields).contains("NO RETREAT") || normalMove() ||
-		// hasNeighbor()));
 	}
 
 	public List<Field> fieldsFromPositions(List<String> positions) {

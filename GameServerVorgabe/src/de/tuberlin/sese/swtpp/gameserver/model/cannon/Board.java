@@ -29,7 +29,7 @@ public class Board {
 	/**
 	 * 
 	 * @param posFields
-	 *            Liste aus die durch Algorithmus ausgewählt wurden
+	 *            Liste aus die durch Algorithmus ausgewï¿½hlt wurden
 	 * @return
 	 */
 	public List<String> retreatFields(List<String> posFields) {
@@ -119,7 +119,7 @@ public class Board {
 	 * 
 	 * subliste(0,4) danach checken ob feld nicht durch eigenen spieler besetzt ist
 	 * isPlayer hat 3-Seitige Logik-> wenn wir Gegnerischen spieler und nicht frei
-	 * haben wollen müssen wir nicht player und isEmpty nehmen.
+	 * haben wollen mï¿½ssen wir nicht player und isEmpty nehmen.
 	 */
 
 	public boolean normalMoveCheck(String to, String requestingPlayer, List<String> surroundingFields) {
@@ -182,24 +182,31 @@ public class Board {
 	 * 
 	 * @TODO !!!!!!!!!!!!!!!!!!!!!!!
 	 * 
-	 * algorithmus muss in anyMatch Stream geschehen und für jedes Element, was zum spieler gehört anwenden
+	 *       algorithmus muss in anyMatch Stream geschehen und fï¿½r jedes Element,
+	 *       was zum spieler gehï¿½rt anwenden
 	 * 
-	 * 1. Liste mit Feldern die nur vom Spieler bestzt sind
-	 * 2. auf diese Liste anymatch
+	 *       1. Liste mit Feldern die nur vom Spieler bestzt sind 2. auf diese Liste
+	 *       anymatch
 	 * 
 	 * 
-	 * 		finde ein Element, was vor sich frei hat, zum Spieler gehï¿½rt und
-	 *       nicht eine Burg ist
+	 *       finde ein Element, was vor sich frei hat, zum Spieler gehï¿½rt und nicht
+	 *       eine Burg ist
 	 */
 
 	public boolean canStillPlay(String requestingPlayer) {
-		List<String> posfields = algorithmus
-		return posFields.contains((inDanger(posFields, requestingPlayer)) && !retreat(posFields).contains("NO RETREAT") || normalMove() || hasNeighbor()));
+
+		return fieldList.stream().anyMatch(a -> {
+			List<String> posFields = FieldHandler.mark(a.getPostion(), requestingPlayer);
+			if (inDanger(posFields, requestingPlayer) && !retreatFields(posFields).contains("NO RETREAT")
+					|| normalMove(requestingPlayer, posFields))
+				return true;
+			return false;
+		});
+		// return posFields.contains((inDanger(posFields, requestingPlayer)) &&
+		// !retreat(posFields).contains("NO RETREAT") || normalMove() ||
+		// hasNeighbor()));
 	}
 
-	
-	
-	
 	public List<Field> fieldsFromPositions(List<String> positions) {
 		return fieldList.stream().filter(f -> positions.contains(f.getPostion())).collect(Collectors.toList());
 	}

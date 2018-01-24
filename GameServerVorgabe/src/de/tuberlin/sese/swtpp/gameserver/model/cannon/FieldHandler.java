@@ -45,7 +45,7 @@ public class FieldHandler extends LinkedList<Field> {
 
 	}
 
-	public String getString(int a, int b, String position) {
+	public static String getString(int a, int b, String position) {
 		return "" + (char) a + position.charAt(0) + "" + (char) b + position.charAt(2);
 
 	}
@@ -101,7 +101,7 @@ public class FieldHandler extends LinkedList<Field> {
 	 *            white
 	 * @return List of marked fields
 	 */
-	public List mark(String field, String player) {
+	public static List<String> mark(String field, String player) {
 		String from;
 		String to;
 		if (player.equalsIgnoreCase("w")) {
@@ -124,10 +124,10 @@ public class FieldHandler extends LinkedList<Field> {
 	 * @return List that contains all Strings but that surround a field or could be
 	 *         possible turn
 	 */
-	private List markFieldsAroundField(String startField, String from, String to) {
+	private static List<String> markFieldsAroundField(String startField, String from, String to) {
 
 		String field = from;
-		ArrayList ls = new ArrayList();
+		List<String> ls = new ArrayList<String>();
 		int fromCol = (int) from.charAt(0);
 		int fromRow = (int) from.charAt(1);
 		int toCol = (int) to.charAt(0);
